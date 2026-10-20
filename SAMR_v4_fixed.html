@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SAMR | ماشین‌حساب مهندسی برق</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e8eff2;--cd:#fff;--tx:#0a2230;--mu:#587080;--ac:#0b6e7f;--ln:#d2dee3;--chip:#eaf1f4;--ok:#0a8f5b;--wr:#b45309;--er:#c62828;--ink:#072431;--amb:#f2a71b;--sh:0 1px 0 rgba(7,36,49,.04),0 10px 22px -18px rgba(7,36,49,.5);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#06161e;--cd:#0d2430;--tx:#e6f1f4;--mu:#8ea8b3;--ac:#4fc3d6;--ln:#1c3a48;--chip:#13313f;--ok:#35c98d;--wr:#f0a840;--er:#ff7a7a;--sh:0 1px 0 rgba(0,0,0,.3),0 10px 22px -18px rgba(0,0,0,.9);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#06161e;--cd:#0d2430;--tx:#e6f1f4;--mu:#8ea8b3;--ac:#4fc3d6;--ln:#1c3a48;--chip:#13313f;--ok:#35c98d;--wr:#f0a840;--er:#ff7a7a;--sh:0 1px 0 rgba(0,0,0,.3),0 10px 22px -18px rgba(0,0,0,.9);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.7 Vazirmatn,Tahoma,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--ink);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--ink);color:#fff;display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:2px solid var(--amb)}
+header .lg{display:flex}header b{font-size:18px;letter-spacing:2px}header small{opacity:.7;flex:1;font-size:12px}
+header button{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:11px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer}
+main{max-width:760px;margin:auto;padding:14px 14px 40px}
+h2{font-size:15px;margin:22px 0 10px;display:flex;align-items:center;gap:8px;color:var(--tx);font-weight:800}
+h2::before{content:"";width:18px;height:4px;border-radius:2px;background:var(--amb)}
+input,select,textarea{width:100%;min-height:46px;border:1px solid var(--ln);border-radius:12px;background:var(--cd);color:var(--tx);padding:0 12px;font:inherit}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--ac);outline-offset:1px}
+input[dir=ltr]{text-align:left}
+.card{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh)}
+.t{display:block;width:100%;text-align:right;cursor:pointer;color:inherit;font:inherit}
+.t small{color:var(--mu);display:block}
+.badge{font-size:11px;padding:1px 9px;border-radius:99px;background:var(--wr);color:#fff;white-space:nowrap}
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:18px 16px 16px;color:#fff;background:linear-gradient(140deg,#072431 0%,#0a3a4a 58%,#0d5062 100%);margin-bottom:12px}
+.hero .pcb{position:absolute;inset:0;width:100%;height:100%;opacity:.2;pointer-events:none}
+.hero .hc{position:relative}.hero h1{margin:0;font-size:23px;line-height:1.45;font-weight:800}.hero p{margin:4px 0 14px;opacity:.82;font-size:13.5px}
+.sb{position:relative}.sb svg{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);color:#587080;pointer-events:none}
+.sb input{padding-inline-start:44px;min-height:50px;border:0;border-radius:14px;background:#fff;color:#0a2230}
+.chips{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}.chips span{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:0 11px;font-size:12.5px}
+.qa{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 2px}
+.qc{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--tx);border:1px solid var(--ln);border-radius:14px;padding:10px;background:var(--cd);box-shadow:var(--sh)}
+.qc .ti{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c)}
+.qc b{display:block;font-size:13.5px;line-height:1.45}.qc small{display:block;color:var(--mu);font-size:12px;line-height:1.45}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(min-width:560px){.tiles{grid-template-columns:repeat(3,1fr)}}
+.tile{padding:0;border:1px solid var(--ln);border-radius:16px;background:var(--cd);overflow:hidden;cursor:pointer;text-align:right;color:var(--tx);font:inherit;display:block;box-shadow:var(--sh)}
+.tile .im{display:block;background:color-mix(in srgb,var(--c) 13%,var(--cd));color:var(--c);padding:10px 10px 6px}.tile .im svg{width:100%;height:auto;max-height:88px;display:block}
+.tile .tl{display:block;padding:8px 12px 10px}.tile b{display:block;font-size:13.5px;line-height:1.5}.tile small{color:var(--mu);font-size:12px}
+.tile.on{outline:2px solid var(--c);outline-offset:1px}
+.tc{display:flex;align-items:center;gap:12px;width:100%;text-align:right;background:var(--cd);border:1px solid var(--ln);border-inline-start:4px solid var(--c);border-radius:12px;padding:9px 12px;margin-bottom:8px;color:var(--tx);font:inherit;cursor:pointer;box-shadow:var(--sh)}
+.tc .ti{flex:none;width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 15%,transparent);color:var(--c)}
+.tc .tx{flex:1;min-width:0}.tc b{display:block;font-size:14.5px;line-height:1.5}.tc small{display:block;color:var(--mu);font-size:12.5px;line-height:1.5}
+.pj{display:flex;gap:6px;margin-bottom:8px}.pj .tc{margin:0;flex:1}.del{flex:none;width:46px;border-radius:12px;border:1px solid var(--er);background:var(--cd);color:var(--er);font-size:22px;cursor:pointer}
+.bn{display:flex;align-items:center;gap:10px;overflow:hidden;padding:14px 16px;border-radius:18px;color:#fff;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 82%,#072431),#072431);margin:6px 0 12px}
+.bn .bt{flex:1;min-width:0}.bn small{opacity:.85;font-size:12.5px;display:block}.bn h1{margin:0;font-size:18px;line-height:1.55}
+.bn .ba{flex:none;width:112px;color:rgba(255,255,255,.92)}.bn .ba svg{width:100%;height:auto;display:block}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cats button{min-height:46px;border:1px solid var(--ln);background:var(--cd);color:var(--tx);border-radius:12px;font:inherit;padding:6px;cursor:pointer}
+.cats button.on{border-color:var(--ac);outline:2px solid var(--ac);background:color-mix(in srgb,var(--ac) 10%,var(--cd))}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.fld{min-width:0}.fld.w2{grid-column:1/-1}
+.row{display:flex;gap:8px;margin:12px 0}.row button{flex:1;min-height:48px;border-radius:12px;border:1px solid var(--ln);font:700 15px Vazirmatn,Tahoma,sans-serif;background:var(--cd);color:var(--tx);cursor:pointer}
+.row .p{background:var(--amb);color:#072431;border-color:transparent;font-weight:800}
+.row input{margin:0}
+label{display:block;margin:10px 0 4px;font-size:13px;color:var(--mu)}label i{font-style:normal}
+.un{display:inline-block;direction:ltr;margin-inline-start:4px;padding:0 7px;border-radius:6px;background:var(--chip);color:var(--tx);font-size:11.5px;line-height:1.6}
+.res div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--ln)}.res div:last-child{border:0}
+.res b{font-weight:500;font-size:13.5px;color:var(--mu)}.res span{direction:ltr;font-size:17px;font-weight:700;color:var(--tx);text-align:left}
+.er{border-color:var(--er);color:var(--er)}.w{color:var(--wr)}.ok{color:var(--ok)}
+code{direction:ltr;display:block;text-align:left;white-space:pre-wrap;font-size:13.5px;color:var(--tx);background:var(--chip);border-radius:8px;padding:4px 8px;margin:4px 0}
+a.back{color:var(--ac);text-decoration:none;display:inline-block;min-height:36px;font-size:14px}
+@media print{:root,:root[data-theme]{--bg:#fff;--cd:#fff;--tx:#000;--mu:#333;--ac:#0b3d91;--ln:#999;--ok:#060;--wr:#840;--er:#a00;--sh:none;color-scheme:light}header,body::before,.row,a.back,.bn .ba{display:none!important}body{background:#fff}.bn{color:#000;background:#fff!important;border:1px solid #999}}
+.tbar{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;margin:8px -2px 0;scrollbar-width:none}.tbar::-webkit-scrollbar{display:none}
+.tbar button{flex:none;min-width:76px;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:1px solid var(--ln);border-radius:14px;background:var(--cd);color:var(--tx);font:600 12px Vazirmatn,Tahoma,sans-serif;cursor:pointer;box-shadow:var(--sh)}
+.tbar svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tbar button.on{background:var(--ink);border-color:var(--ink);color:var(--amb)}
+.hp{margin-top:12px;border:1px solid var(--ln);border-radius:14px;padding:0 12px;background:var(--chip)}.hp summary{min-height:46px;display:flex;align-items:center;font-weight:700;font-size:14px;cursor:pointer}.hp[open]{padding-bottom:12px}.hp p{margin:0;color:var(--mu);font-size:13px;line-height:1.9}
+.stp{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-weight:800;font-size:15px}.stp i{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--amb);display:grid;place-items:center;font-style:normal;font-size:13px}
+
+#samr-menu-toggle{position:fixed;left:12px;top:14px;z-index:10020;width:44px;height:44px;border:1px solid var(--ln);border-radius:12px;background:var(--cd);color:var(--tx);font-size:25px;box-shadow:0 3px 12px #0002;cursor:pointer}
+#samr-drawer-shade{position:fixed;inset:0;background:#0007;z-index:10010;display:none}
+#samr-drawer{position:fixed;left:0;top:0;bottom:0;width:min(290px,82vw);z-index:10011;background:var(--bg);border-right:1px solid var(--ln);box-shadow:6px 0 25px #0003;transform:translateX(-105%);transition:transform .22s ease;padding:20px 14px;box-sizing:border-box;overflow:auto}
+#samr-drawer.open{transform:translateX(0)}
+#samr-drawer h3{margin:48px 0 18px}
+#samr-drawer a{display:flex;align-items:center;gap:10px;padding:13px 12px;margin:7px 0;border:1px solid var(--ln);border-radius:12px;background:var(--cd);color:var(--tx);text-decoration:none;font-weight:700}
+#samr-drawer a:active{opacity:.75}
+</style></head><body>
+<header><span class="lg" id="lg0"></span><b>SAMR</b><small>ماشین‌حساب مهندسی برق</small><button id="th" aria-label="تغییر تم"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg></button></header>
+<main id="app"></main>
+<script>
+// ===== موتور محاسبات (مستقل از UI) =====
+const N=x=>isFinite(x)?String(+x.toPrecision(6)):'—';
+const req=(x,l,o={})=>{if(x===null||x===undefined||isNaN(x))throw Error('مقدار «'+l+'» را وارد کنید');
+ if(o.gt!==undefined&&!(x>o.gt))throw Error('«'+l+'» باید بزرگ‌تر از '+o.gt+' باشد');
+ if(o.ge!==undefined&&x<o.ge)throw Error('«'+l+'» نباید کمتر از '+o.ge+' باشد');
+ if(o.le!==undefined&&x>o.le)throw Error('«'+l+'» نباید بیشتر از '+o.le+' باشد');return x};
+const R=(formula,subs,steps,res,warn=[],check='',ref='')=>({formula,subs,steps,res,warn,check,ref});
+const z=()=>{throw Error('مقدار صفر مجاز نیست؛ نتیجه تعریف‌نشده است')};
+const D=Math.PI/180;
+const CATS={ckt:'مدارهای الکتریکی',mac:'ماشین‌های الکتریکی',ind:'برق صنعتی',bld:'برق ساختمان',sol:'خورشیدی و ذخیره‌سازی',pwr:'سیستم‌های قدرت',ele:'الکترونیک قدرت',mth:'ریاضیات مهندسی',ins:'ابزار دقیق',plc:'PLC و میکروکنترلر',prt:'حفاظت و استانداردها'};
+// فیلدها: [کلید, برچسب, واحد, پیش‌فرض, 't' برای متن | آرایه گزینه‌ها]
+const T=[
+{id:'ohm',cat:'ckt',pop:1,name:'قانون اهم و توان',desc:'هر دو کمیت از V, I, R, P را بدهید',
+ f:[['V','ولتاژ','V',''],['I','جریان','A',''],['R','مقاومت','Ω',''],['P','توان','W','']],
+ run(v){const g=['V','I','R','P'].filter(k=>v[k]!==null&&!isNaN(v[k]));
+  if(g.length<2)throw Error('حداقل دو کمیت را وارد کنید');
+  let {V,I,R:r,P}=v;const a=g.slice(0,2).join('+'),w=[];
+  if(g.length>2)w.push('بیش از دو کمیت وارد شد؛ فقط '+g.slice(0,2).join(' و ')+' استفاده شد.');
+  if(a.includes('R'))req(r,'R',{gt:0});if(a.includes('P'))req(P,'P',{ge:0});
+  if(a==='V+I'){}else if(a==='V+R')I=V/r;else if(a==='V+P'){if(!V)z();I=P/V}else if(a==='I+R')V=I*r;else if(a==='I+P'){if(!I)z();V=P/I}else{I=Math.sqrt(P/r);V=I*r}
+  if(!I)z();r=V/I;P=V*I;
+  return R('V = I·R ، P = V·I = I²·R = V²/R','V='+N(V)+' V ، I='+N(I)+' A',['R = V/I = '+N(V)+'/'+N(I)+' = '+N(r)+' Ω','P = V·I = '+N(P)+' W'],
+   [['ولتاژ',N(V),'V'],['جریان',N(I),'A'],['مقاومت',N(r),'Ω'],['توان',N(P),'W']],w,'I²R = '+N(I*I*r)+' W و V²/R = '+N(V*V/r)+' W باید با P برابر باشند.')}},
+{id:'sp',cat:'ckt',pop:1,name:'مقاومت سری و موازی',desc:'مقاومت معادل و جریان‌ها',
+ f:[['L','مقاومت‌ها (با کاما جدا کنید)','Ω','100, 220, 470','t'],['V','ولتاژ منبع (اختیاری)','V','']],
+ run(v){const L=String(v.L).split(/[,،\s]+/).filter(Boolean).map(Number);
+  if(L.length<2||L.some(x=>isNaN(x)||x<0))throw Error('حداقل دو مقاومت معتبر و غیرمنفی وارد کنید');
+  const rs=L.reduce((a,b)=>a+b,0),rp=L.includes(0)?0:1/L.reduce((a,b)=>a+1/b,0),res=[['سری',N(rs),'Ω'],['موازی',N(rp),'Ω']],w=[];
+  if(v.V!==null&&!isNaN(v.V)){res.push(['جریان کل (سری)',N(v.V/rs),'A']);if(rp)res.push(['جریان کل (موازی)',N(v.V/rp),'A']);else w.push('مقاومت صفر در حالت موازی اتصال کوتاه است.')}
+  return R('Rs = ΣRi ، 1/Rp = Σ(1/Ri)','R = ['+L.join(', ')+'] Ω',['Rs = '+L.join(' + ')+' = '+N(rs),'Rp = 1/('+L.map(x=>'1/'+x).join(' + ')+') = '+N(rp)],res,w,'Rp باید از کوچک‌ترین مقاومت کمتر باشد: '+N(rp)+' ≤ '+N(Math.min(...L)))}},
+{id:'p3',cat:'pwr',pop:1,name:'توان سه‌فاز',desc:'S, P, Q از ولتاژ خط و جریان',
+ f:[['V','ولتاژ خط','V','400'],['I','جریان خط','A',''],['pf','ضریب توان','','0.85'],['k','نوع بار','',[['i','سلفی (پس‌فاز)'],['c','خازنی (پیش‌فاز)']]]],
+ run(v){req(v.V,'ولتاژ',{gt:0});req(v.I,'جریان',{gt:0});req(v.pf,'ضریب توان',{gt:0,le:1});
+  const S=Math.sqrt(3)*v.V*v.I,P=S*v.pf,ph=Math.acos(v.pf),Q=S*Math.sin(ph)*(v.k==='c'?-1:1);
+  return R('S = √3·V·I ، P = S·cosφ ، Q = S·sinφ','V='+v.V+' ، I='+v.I+' ، cosφ='+v.pf,['S = 1.732×'+v.V+'×'+v.I+' = '+N(S/1000)+' kVA','P = '+N(P/1000)+' kW','φ = '+N(ph/D)+'°'],
+   [['توان ظاهری',N(S/1000),'kVA'],['توان اکتیو',N(P/1000),'kW'],['توان راکتیو',N(Q/1000),'kvar'],['زاویه φ',N(ph/D),'°']],
+   ['فرض: بار متعادل.'],'S² = P² + Q²: '+N((S*S)/1e6)+' ≈ '+N((P*P+Q*Q)/1e6))}},
+{id:'pfc',cat:'ind',pop:1,name:'اصلاح ضریب توان (خازن)',desc:'ظرفیت بانک خازنی موردنیاز',
+ f:[['P','توان اکتیو','kW',''],['V','ولتاژ (خط یا فاز تک‌فاز)','V','400'],['f','فرکانس','Hz','50'],['p1','ضریب توان فعلی','','0.75'],['p2','ضریب توان هدف','','0.95'],['c','اتصال','',[['d','سه‌فاز مثلث'],['y','سه‌فاز ستاره'],['s','تک‌فاز']]]],
+ run(v){req(v.P,'توان',{gt:0});req(v.V,'ولتاژ',{gt:0});req(v.f,'فرکانس',{gt:0});req(v.p1,'ضریب توان فعلی',{gt:0,le:1});req(v.p2,'ضریب توان هدف',{gt:0,le:1});
+  if(v.p2<=v.p1)throw Error('ضریب توان هدف باید بیشتر از ضریب توان فعلی باشد');
+  const t=x=>Math.tan(Math.acos(x)),Q=v.P*(t(v.p1)-t(v.p2)),w=2*Math.PI*v.f,C=Q*1000/(w*v.V*v.V)/(v.c==='d'?3:1)*1e6;
+  return R('Qc = P·(tanφ1 − tanφ2) ، C = Qc / (ω·V²) [مثلث: تقسیم بر ۳]','P='+v.P+' kW ، '+v.p1+' → '+v.p2,['Qc = '+v.P+'×('+N(t(v.p1))+' − '+N(t(v.p2))+') = '+N(Q)+' kvar','ω = 2π×'+v.f+' = '+N(w)],
+   [['توان راکتیو خازن',N(Q),'kvar'],['ظرفیت هر خازن/فاز',N(C),'µF']],['در اتصال ستاره V را ولتاژ خط وارد کنید؛ هارمونیک و رزونانس بررسی نشده است.'],'cosφ هدف: '+v.p2,'')}},
+{id:'ind',cat:'mac',pop:1,name:'موتور القایی: سرعت و لغزش',desc:'سرعت سنکرون، لغزش، فرکانس روتور',
+ f:[['f','فرکانس شبکه','Hz','50'],['p','تعداد قطب','','4'],['n','سرعت روتور','rpm','1440']],
+ run(v){req(v.f,'فرکانس',{gt:0});req(v.p,'قطب',{gt:0});req(v.n,'سرعت روتور',{ge:0});
+  if(v.p%2)throw Error('تعداد قطب باید زوج باشد');
+  const ns=120*v.f/v.p,s=(ns-v.n)/ns,w=[];
+  if(s<0)w.push('لغزش منفی: ناحیه ژنراتوری.');if(s>0.1)w.push('لغزش بیش از ۱۰٪ است؛ مقدار ورودی را بررسی کنید.');
+  return R('ns = 120f/p ، s = (ns − n)/ns ، fr = s·f','f='+v.f+' ، p='+v.p+' ، n='+v.n,['ns = 120×'+v.f+'/'+v.p+' = '+N(ns)+' rpm','s = ('+N(ns)+' − '+v.n+')/'+N(ns)],
+   [['سرعت سنکرون',N(ns),'rpm'],['لغزش',N(s*100),'%'],['فرکانس روتور',N(s*v.f),'Hz']],w,'n = ns(1−s) = '+N(ns*(1-s))+' rpm')}},
+{id:'trf',cat:'mac',name:'ترانسفورماتور تک‌فاز',desc:'نسبت تبدیل، جریان اولیه، راندمان',
+ f:[['V1','ولتاژ اولیه','V',''],['V2','ولتاژ ثانویه','V',''],['I2','جریان ثانویه','A',''],['e','راندمان','%','100']],
+ run(v){req(v.V1,'V1',{gt:0});req(v.V2,'V2',{gt:0});req(v.I2,'I2',{gt:0});req(v.e,'راندمان',{gt:0,le:100});
+  const a=v.V1/v.V2,P2=v.V2*v.I2,P1=P2/(v.e/100),I1=P1/v.V1;
+  return R('a = V1/V2 ، P1 = P2/η ، I1 = P1/V1','V1='+v.V1+' ، V2='+v.V2+' ، I2='+v.I2,['a = '+N(a),'P2 = '+N(P2)+' VA','P1 = '+N(P1)+' W'],
+   [['نسبت تبدیل',N(a),''],['جریان اولیه',N(I1),'A'],['توان ثانویه',N(P2),'W'],['تلفات',N(P1-P2),'W']],['مدل ساده: افت ولتاژ و جریان بی‌باری لحاظ نشده است.'],'ایده‌آل (η=100٪): V1·I1 = V2·I2')}},
+{id:'cab',cat:'bld',pop:1,name:'افت ولتاژ و طول مجاز کابل',desc:'تخمین اولیه افت ولتاژ',
+ f:[['s','سیستم','',[['3','سه‌فاز'],['1','تک‌فاز']]],['V','ولتاژ (خط/فاز)','V','400'],['I','جریان','A',''],['L','طول','m',''],['S','سطح مقطع','mm²',''],['m','جنس هادی','',[['cu','مس'],['al','آلومینیوم']]],['pf','ضریب توان','','0.9'],['a','افت مجاز','%','3'],['Ta','دمای محیط','°C','30'],['ins','نوع عایق (حداکثر دمای مجاز هادی)','',[['70','PVC (۷۰°C)'],['90','XLPE/EPR (۹۰°C)']]],['Iz','جریان مجاز کابل Iz از جدول سازنده (اختیاری)','A',''],['Tx','دمای هادی اگر خودتان می‌دانید (اختیاری، بر بقیه مقدم است)','°C','']],
+ run(v){['V','I','L','S'].forEach(k=>req(v[k],k,{gt:0}));req(v.Ta,'دمای محیط',{ge:-40,le:80});if(v.Iz!==null&&!isNaN(v.Iz))req(v.Iz,'Iz',{gt:0});if(v.Tx!==null&&!isNaN(v.Tx))req(v.Tx,'دمای هادی',{ge:-40,le:150});req(v.pf,'ضریب توان',{gt:0,le:1});req(v.a,'افت مجاز',{gt:0});
+  const k=v.s==='3'?Math.sqrt(3):2,r20=v.m==='cu'?1/56:1/35,al=v.m==='cu'?0.00393:0.00403,Tm=+v.ins,Tc=(v.Tx!==null&&!isNaN(v.Tx))?v.Tx:(v.Iz!==null&&!isNaN(v.Iz))?v.Ta+(Tm-v.Ta)*Math.pow(v.I/v.Iz,2):Tm,rho=r20*(1+al*(Tc-20)),dv=k*rho*v.L*v.I*v.pf/v.S,pc=dv/v.V*100,Lm=v.a/100*v.V*v.S/(k*rho*v.I*v.pf);
+  return R('ΔV = k·ρ·L·I·cosφ / S  (k=√3 سه‌فاز، k=2 تک‌فاز)','ρ='+N(rho)+' Ω·mm²/m (۲۰°C)',['ΔV = '+N(k)+'×'+N(rho)+'×'+v.L+'×'+v.I+'×'+v.pf+'/'+v.S+' = '+N(dv)+' V'],
+   [['افت ولتاژ',N(dv),'V'],['افت درصد',N(pc),'%'],['حداکثر طول مجاز',N(Lm),'m'],['وضعیت',pc<=v.a?'مجاز':'بیش از حد',''] ],
+   ['تخمین اولیه: فقط مقاومت در ۲۰°C؛ راکتانس، دمای کار، روش نصب و ظرفیت جریان‌دهی (استاندارد) بررسی نشده است.'],'انتخاب نهایی کابل باید طبق استاندارد مربوط انجام شود.')}},
+{id:'bat',cat:'sol',pop:1,name:'ظرفیت باتری پشتیبان',desc:'Ah موردنیاز بانک باتری',
+ f:[['P','توان بار','W',''],['h','مدت پشتیبانی','h',''],['d','روز استقلال','','1'],['dod','عمق دشارژ مجاز','%','80'],['e','راندمان اینورتر','%','90'],['V','ولتاژ بانک','V','48']],
+ run(v){['P','h','d','V'].forEach(k=>req(v[k],k,{gt:0}));req(v.dod,'DoD',{gt:0,le:100});req(v.e,'راندمان',{gt:0,le:100});
+  const Wh=v.P*v.h*v.d/(v.dod/100*v.e/100),Ah=Wh/v.V;
+  return R('E = P·h·d / (DoD·η) ، Ah = E / V','P='+v.P+' W ، h='+v.h,['E = '+N(Wh)+' Wh','Ah = '+N(Wh)+'/'+v.V+' = '+N(Ah)],
+   [['انرژی ظرفیت اسمی',N(Wh/1000),'kWh'],['ظرفیت بانک',N(Ah),'Ah']],['اثر دما، پیری باتری و جریان دشارژ (C-rate) لحاظ نشده است.'],'')}},
+{id:'dc',cat:'ckt',pop:1,name:'حل مدار DC (تحلیل گره / برهم‌نهی)',desc:'نت‌لیست R, V, I با کنترل KCL و توان',
+ f:[['m','روش حل','',[['n','تحلیل گره (MNA)'],['s','برهم‌نهی']]],['L','نت‌لیست: هر خط «نام گره‌اول گره‌دوم مقدار» (گره ۰ = زمین، مثل 4.7k)','','R1 1 2 100\nR2 2 0 220\nR3 2 0 330\nV1 1 0 12','ta']],
+ run(v){
+  const U={k:1e3,K:1e3,M:1e6,m:1e-3,u:1e-6,'µ':1e-6,n:1e-9},els=[],seen=new Set();
+  String(v.L).split('\n').map(s=>s.trim()).filter(s=>s&&!/^[*#]/.test(s)).forEach((s,i)=>{
+   const p=s.split(/\s+/),t=p[0][0].toUpperCase(),e='خط '+(i+1)+': ';
+   if(p.length!==4)throw Error(e+'قالب باید «نام گره‌اول گره‌دوم مقدار» باشد');
+   if(!'RVI'.includes(t))throw Error(e+'نام المان باید با R، V یا I شروع شود');
+   const m=p[3].match(/^(-?\d*\.?\d+(?:[eE][-+]?\d+)?)([kKMmuµn]?)$/);if(!m)throw Error(e+'مقدار نامعتبر است');
+   const val=+m[1]*(U[m[2]]||1);
+   if(t==='R'&&!(val>0))throw Error(e+'مقاومت باید مثبت باشد');
+   if(p[1]===p[2])throw Error(e+'دو سر المان به یک گره وصل است');
+   if(seen.has(p[0]))throw Error(e+'نام تکراری');seen.add(p[0]);
+   els.push({n:p[0],t,a:p[1],b:p[2],val})});
+  if(els.length<2)throw Error('حداقل دو المان لازم است');
+  if(!els.some(e=>e.a==='0'||e.b==='0'))throw Error('گره زمین (۰) در مدار نیست');
+  const nodes=[...new Set(els.flatMap(e=>[e.a,e.b]))].filter(x=>x!=='0'),ix=Object.fromEntries(nodes.map((x,i)=>[x,i])),vs=els.filter(e=>e.t==='V'),n=nodes.length,sz=n+vs.length,id=x=>x==='0'?-1:ix[x];
+  const build=sc=>{const A=Array.from({length:sz},()=>Array(sz).fill(0)),b=Array(sz).fill(0);
+   els.forEach(e=>{const a=id(e.a),c=id(e.b),val=sc(e);
+    if(e.t==='R'){const g=1/val;if(a>=0)A[a][a]+=g;if(c>=0)A[c][c]+=g;if(a>=0&&c>=0){A[a][c]-=g;A[c][a]-=g}}
+    else if(e.t==='I'){if(a>=0)b[a]-=val;if(c>=0)b[c]+=val}
+    else{const k=n+vs.indexOf(e);if(a>=0){A[a][k]+=1;A[k][a]+=1}if(c>=0){A[c][k]-=1;A[k][c]-=1}b[k]=val}});return[A,b]};
+  const solve=(A,b)=>{const M=A.map((r,i)=>[...r,b[i]]);
+   for(let c=0;c<sz;c++){let p=c;for(let r=c+1;r<sz;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;
+    if(Math.abs(M[p][c])<1e-12)throw Error('دستگاه معادلات ناسازگار است (گره شناور، حلقه منابع ولتاژ یا منابع جریان سری).');
+    [M[c],M[p]]=[M[p],M[c]];for(let r=0;r<sz;r++)if(r!==c){const f=M[r][c]/M[c][c];for(let k=c;k<=sz;k++)M[r][k]-=f*M[c][k]}}
+   return M.map((r,i)=>r[sz]/r[i])};
+  const [A0,b0]=build(e=>e.val),direct=solve(A0,b0),steps=[],w=['جهت جریان هر المان از گره اول به گره دوم است؛ توان منفی یعنی تولید.','تحلیل مش فعلاً پیاده نشده است؛ برای مدار دلخواه به تشخیص حلقه‌های مستقل (مدار مسطح) نیاز دارد.'];
+  let x=direct,diff=null;
+  if(sz<=6){steps.push('دستگاه MNA برای ['+nodes.map(q=>'V'+q).concat(vs.map(q=>'i_'+q.n)).join(', ')+']:');A0.forEach((r,i)=>steps.push(r.map(N).join('  ')+'  |  '+N(b0[i])))}
+  if(v.m==='s'){x=Array(sz).fill(0);const src=els.filter(e=>e.t!=='R');
+   if(!src.length)throw Error('منبعی در مدار نیست');
+   src.forEach(s=>{const [A,b]=build(e=>e===s||e.t==='R'?e.val:0),y=solve(A,b);y.forEach((q,i)=>x[i]+=q);steps.push('اثر '+s.n+' به‌تنهایی: '+nodes.map((q,i)=>'V'+q+'='+N(y[i])).join(' ، '))});
+   diff=Math.max(0,...x.map((q,i)=>Math.abs(q-direct[i])))}
+  const V=q=>q==='0'?0:x[ix[q]],kcl=Object.fromEntries(nodes.map(q=>[q,0]));let sp=0;
+  const res=nodes.map(q=>['V(گره '+q+')',N(V(q)),'V']);
+  els.forEach(e=>{const d=V(e.a)-V(e.b);let i,p;
+   if(e.t==='R'){i=d/e.val;p=i*d}else if(e.t==='I'){i=e.val;p=d*i}else{i=x[n+vs.indexOf(e)];p=d*i}
+   if(e.a!=='0')kcl[e.a]+=i;if(e.b!=='0')kcl[e.b]-=i;sp+=p;res.push([e.n+' ('+N(d)+' V)',N(i)+' A | '+N(p)+' W','']);});
+  const mk=Math.max(0,...Object.values(kcl).map(Math.abs));
+  return R('KCL در هر گره: ΣI = 0 ، MNA: [G B; Bᵀ 0]·[v; i] = [i_s; v_s]','عناصر: '+els.length+' ، گره‌ها: '+n+' ، روش: '+(v.m==='s'?'برهم‌نهی':'تحلیل گره'),steps,res,w,
+   'KCL: بیشترین باقیمانده = '+N(mk)+' A ؛ مجموع توان‌ها = '+N(sp)+' W (باید ≈ ۰ باشد)'+(diff!==null?' ؛ اختلاف با حل مستقیم = '+N(diff)+' V':'')+' ؛ KVL به‌طور ساختاری برقرار است چون ولتاژ شاخه‌ها از پتانسیل گره‌ها به‌دست آمده‌اند.')}},
+{id:'thv',cat:'ckt',pop:1,name:'تونن، نورتون و انتقال حداکثر توان',desc:'مدار معادل بین دو ترمینال',
+ f:[['L','نت‌لیست مدار بدون بار (هر خط: نام گره‌اول گره‌دوم مقدار)','','R1 1 2 100\nR2 2 0 220\nR3 2 0 330\nV1 1 0 12','ta'],['a','ترمینال A (گره)','','2','t'],['b','ترمینال B (گره)','','0','t'],['RL','مقاومت بار (اختیاری)','Ω','']],
+ run(v){
+  const dc=T.find(t=>t.id==='dc'),A=String(v.a).trim(),B=String(v.b).trim();
+  if(!A||!B||A===B)throw Error('دو ترمینال متفاوت وارد کنید');
+  const vol=(r,q)=>{if(q==='0')return 0;const x=r.res.find(y=>y[0]==='V(گره '+q+')');if(!x)throw Error('ترمینال «'+q+'» در مدار نیست');return +x[1]};
+  const r1=dc.run({m:'n',L:v.L}),vth=vol(r1,A)-vol(r1,B);
+  const L2=String(v.L).split('\n').map(s=>{const p=s.trim().split(/\s+/);return p.length===4&&/^[VvIi]/.test(p[0])?p.slice(0,3).join(' ')+' 0':s}).concat('ITHX '+B+' '+A+' 1').join('\n');
+  const rth=vol(dc.run({m:'n',L:L2}),A)-vol(dc.run({m:'n',L:L2}),B),w=['فقط منابع مستقل پشتیبانی می‌شوند؛ منابع وابسته مجاز نیستند.'],
+   steps=['Vth = ولتاژ مدار باز بین '+A+' و '+B+' = '+N(vth)+' V','Rth: منابع ولتاژ ← اتصال کوتاه، منابع جریان ← مدار باز، تزریق ۱ آمپر بین ترمینال‌ها: Rth = '+N(rth)+' Ω'],
+   res=[['Vth',N(vth),'V'],['Rth = RN',N(rth),'Ω']];
+  if(rth>1e-9){const In=vth/rth;res.push(['In (نورتون)',N(In),'A'],['حداکثر توان در RL = Rth',N(vth*vth/(4*rth)),'W']);steps.push('In = Vth/Rth = '+N(In)+' A','Pmax = Vth²/(4Rth) = '+N(vth*vth/(4*rth))+' W')}
+  else w.push('Rth ≈ 0 (منبع ایده‌آل)؛ نورتون و انتقال حداکثر توان تعریف‌نشده است.');
+  if(v.RL!==null&&!isNaN(v.RL)){req(v.RL,'RL',{gt:0});const I=vth/(rth+v.RL);res.push(['جریان بار',N(I),'A'],['ولتاژ بار',N(I*v.RL),'V'],['توان بار',N(I*I*v.RL),'W']);steps.push('IL = Vth/(Rth+RL) = '+N(I)+' A')}
+  return R('Vth = V_AB (مدار باز) ، Rth = V_AB/۱A (منابع صفر) ، In = Vth/Rth ، Pmax = Vth²/(4Rth)','ترمینال‌ها: '+A+' و '+B,steps,res,w,'در RL = Rth توان بار بیشینه و راندمان ۵۰٪ است.')}},
+{id:'rlc',cat:'ckt',pop:1,name:'مدار AC: RLC سری/موازی و تشدید',desc:'امپدانس، جریان، فاز، توان، فرکانس تشدید',
+ f:[['t','اتصال','',[['s','سری'],['p','موازی']]],['V','ولتاژ RMS','V','220'],['f','فرکانس','Hz','50'],['R','مقاومت','Ω','10'],['L','سلف (اختیاری)','mH','50'],['C','خازن (اختیاری)','µF','100']],
+ run(v){req(v.V,'ولتاژ',{gt:0});req(v.f,'فرکانس',{gt:0});req(v.R,'R',{gt:0});
+  const hL=v.L!==null&&!isNaN(v.L),hC=v.C!==null&&!isNaN(v.C);if(!hL&&!hC)throw Error('حداقل یکی از L یا C را وارد کنید');
+  if(hL)req(v.L,'L',{gt:0});if(hC)req(v.C,'C',{gt:0});
+  const w=2*Math.PI*v.f,L=hL?v.L*1e-3:0,C=hC?v.C*1e-6:0,XL=hL?w*L:0,XC=hC?1/(w*C):0,V=v.V,f0=hL&&hC?1/(2*Math.PI*Math.sqrt(L*C)):null,res=[],st=['ω = 2πf = '+N(w)+' rad/s'],wr=[];
+  let P,Q,S,pf,fo;
+  if(v.t==='s'){const X=XL-XC,Z=Math.hypot(v.R,X),I=V/Z,ph=Math.atan2(X,v.R)/D;P=I*I*v.R;Q=I*I*X;S=V*I;pf=v.R/Z;
+   st.push('XL = '+N(XL)+' Ω ، XC = '+N(XC)+' Ω','Z = '+N(v.R)+' + j'+N(X)+' Ω','|Z| = '+N(Z)+' Ω ، I = V/|Z| = '+N(I)+' A');
+   res.push(['|Z|',N(Z),'Ω'],['φ (مثبت=سلفی)',N(ph),'°'],['جریان',N(I),'A'],['V_R',N(I*v.R),'V']);if(hL)res.push(['V_L',N(I*XL),'V']);if(hC)res.push(['V_C',N(I*XC),'V']);
+   if(f0)res.push(['فرکانس تشدید',N(f0),'Hz'],['ضریب کیفیت Q',N(Math.sqrt(L/C)/v.R),'']);fo='Z = R + j(ωL − 1/ωC) ، I = V/|Z| ، f0 = 1/(2π√LC) ، Q = (1/R)√(L/C)'}
+  else{const G=1/v.R,BL=hL?1/(w*L):0,BC=hC?w*C:0,B=BC-BL,Y=Math.hypot(G,B),I=V*Y,ph=Math.atan2(B,G)/D;P=V*V*G;Q=-V*V*B;S=V*I;pf=G/Y;
+   st.push('G = '+N(G)+' S ، BL = '+N(BL)+' S ، BC = '+N(BC)+' S','|Y| = '+N(Y)+' S ، I = V·|Y| = '+N(I)+' A');
+   res.push(['|Y|',N(Y),'S'],['φ جریان (مثبت=پیش‌فاز)',N(ph),'°'],['جریان کل',N(I),'A'],['I_R',N(V*G),'A']);if(hL)res.push(['I_L',N(V*BL),'A']);if(hC)res.push(['I_C',N(V*BC),'A']);
+   if(f0)res.push(['فرکانس تشدید',N(f0),'Hz'],['ضریب کیفیت Q',N(v.R*Math.sqrt(C/L)),'']);fo='Y = 1/R + j(ωC − 1/ωL) ، I = V·|Y| ، P = V²G ، Q = V²(BL − BC)'}
+  res.push(['P',N(P),'W'],['Q (مثبت=سلفی)',N(Q),'var'],['S',N(S),'VA'],['cosφ',N(pf),'']);
+  if(f0&&Math.abs(v.f-f0)/f0<0.02)wr.push('فرکانس نزدیک تشدید است؛ جریان یا ولتاژ المان‌ها می‌تواند بسیار بزرگ شود.');
+  return R(fo,'V='+V+' V ، f='+v.f+' Hz ، R='+v.R+' Ω',st,res,wr,'S² = '+N(S*S)+' و P²+Q² = '+N(P*P+Q*Q)+' باید برابر باشند.')}},
+{id:'trn',cat:'ckt',name:'پاسخ پله RC / RL',desc:'ثابت زمانی و مقدار در لحظه t',
+ f:[['t','مدار','',[['rc','RC (شارژ خازن)'],['rl','RL (برقراری جریان)']]],['V','ولتاژ منبع','V','12'],['R','مقاومت','Ω','1000'],['X','C (µF) برای RC یا L (mH) برای RL','','100'],['tm','زمان t','ms','100']],
+ run(v){req(v.V,'V');req(v.R,'R',{gt:0});req(v.X,'مقدار C/L',{gt:0});req(v.tm,'زمان',{ge:0});
+  const rc=v.t==='rc',tau=rc?v.R*v.X*1e-6:v.X*1e-3/v.R,t=v.tm*1e-3,e=Math.exp(-t/tau),If=v.V/v.R,res=[['ثابت زمانی τ',N(tau*1000),'ms'],['۵τ (≈۹۹٫۳٪ نهایی)',N(5*tau*1000),'ms']];
+  if(rc)res.push(['v_C(t)',N(v.V*(1-e)),'V'],['i(t)',N(If*e),'A'],['v_R(t)',N(v.V*e),'V']);else res.push(['i(t)',N(If*(1-e)),'A'],['v_L(t)',N(v.V*e),'V'],['مقدار نهایی i',N(If),'A']);
+  return R(rc?'τ = RC ، v_C = V(1 − e^(−t/τ)) ، i = (V/R)e^(−t/τ)':'τ = L/R ، i = (V/R)(1 − e^(−t/τ)) ، v_L = V e^(−t/τ)','شرایط اولیه صفر',['τ = '+N(tau*1000)+' ms','e^(−t/τ) = '+N(e)],res,[],'')}},
+{id:'str',cat:'sol',pop:1,name:'طراحی رشته پنل و MPPT',desc:'حداقل/حداکثر پنل در هر رشته سری',
+ f:[['voc','Voc پنل (STC)','V','49.5'],['vmp','Vmp پنل (STC)','V','41.5'],['b','ضریب دمایی Voc','%/°C','-0.27'],['tl','حداقل دمای محیط','°C','-10'],['th','حداکثر دمای سلول','°C','70'],['vd','حداکثر ولتاژ DC اینورتر','V','1000'],['m1','حداقل MPPT','V','200'],['m2','حداکثر MPPT','V','800']],
+ run(v){['voc','vmp','vd','m1','m2'].forEach(k=>req(v[k],k,{gt:0}));req(v.b,'ضریب دمایی',{le:0});if(v.m2<=v.m1)throw Error('MPPT نامعتبر است');
+  const k=v.b/100,vc=v.voc*(1+k*(v.tl-25)),vmc=v.vmp*(1+k*(v.tl-25)),vh=v.vmp*(1+k*(v.th-25)),nmax=Math.floor(Math.min(v.vd/vc,v.m2/vmc)),nmin=Math.ceil(v.m1/vh),ok=nmin<=nmax;
+  return R('Voc(T) = Voc·(1 + β·(T − 25)) ، Nmax = min(Vdc/Voc_cold , MPPTmax/Vmp_cold) ، Nmin = MPPTmin/Vmp_hot','β='+v.b+' %/°C',['Voc در سرما = '+N(vc)+' V','Vmp در سرما = '+N(vmc)+' V','Vmp در گرما = '+N(vh)+' V'],
+   [['حداکثر تعداد در رشته',ok?String(nmax):N(nmax),''],['حداقل تعداد در رشته',String(nmin),''],['ولتاژ مدار باز رشته (حداکثر)',N(nmax*vc),'V'],['وضعیت',ok?'قابل اجرا':'ناسازگار با این اینورتر','']],
+   ['فرض: ضریب دمایی Vmp برابر Voc گرفته شد؛ برای طراحی نهایی از دیتاشیت پنل/اینورتر و استاندارد استفاده کنید. جریان ورودی اینورتر بررسی نشد.'],'')}},
+{id:'dcm',cat:'mac',name:'موتور DC: گشتاور و راندمان',desc:'نیروی ضدمحرکه، توان، گشتاور، راندمان',
+ f:[['Va','ولتاژ آرمیچر','V','220'],['Ra','مقاومت آرمیچر','Ω','0.5'],['Ia','جریان آرمیچر','A','20'],['n','سرعت','rpm','1500'],['Pr','تلفات چرخشی','W','0']],
+ run(v){req(v.Va,'Va',{gt:0});req(v.Ra,'Ra',{ge:0});req(v.Ia,'Ia',{gt:0});req(v.n,'n',{gt:0});req(v.Pr,'تلفات چرخشی',{ge:0});
+  const Ea=v.Va-v.Ia*v.Ra;if(Ea<=0)throw Error('نیروی ضدمحرکه منفی شد؛ Ia یا Ra نامعتبر است');
+  const Pc=Ea*v.Ia,w=2*Math.PI*v.n/60,T=Pc/w,Po=Pc-v.Pr,Pi=v.Va*v.Ia;if(Po<=0)throw Error('تلفات چرخشی از توان تبدیلی بیشتر است');
+  return R('Ea = Va − Ia·Ra ، Pconv = Ea·Ia ، T = Pconv/ω ، η = Pout/Pin','Va='+v.Va+' ، Ia='+v.Ia,['Ea = '+N(Ea)+' V','Pconv = '+N(Pc)+' W ، ω = '+N(w)+' rad/s'],
+   [['Ea',N(Ea),'V'],['گشتاور الکترومغناطیسی',N(T),'N·m'],['توان ورودی',N(Pi),'W'],['توان خروجی',N(Po),'W'],['راندمان',N(Po/Pi*100),'%']],['تلفات تحریک محاسبه نشده است.'],'Pin − Ia²Ra − Pr = '+N(Pi-v.Ia*v.Ia*v.Ra-v.Pr)+' W باید با Pout برابر باشد.')}},
+{id:'ild',cat:'ind',pop:1,name:'جریان بار تک‌فاز/سه‌فاز',desc:'جریان و توان ظاهری از توان و ولتاژ',
+ f:[['k','سیستم','',[['3','سه‌فاز'],['1','تک‌فاز']]],['cn','اتصال سیم‌پیچ بار/موتور (فقط سه‌فاز)','',[['d','مثلث (Δ)'],['y','ستاره (Y)']]],['P','توان','kW',''],['V','ولتاژ (سه‌فاز: خط)','V','400'],['pf','ضریب توان','','0.85'],['e','راندمان','%','90']],
+ run(v){req(v.P,'توان',{gt:0});req(v.V,'V',{gt:0});req(v.pf,'ضریب توان',{gt:0,le:1});req(v.e,'راندمان',{gt:0,le:100});
+  const k=v.k==='3'?Math.sqrt(3):1,I=v.P*1000/(k*v.V*v.pf*v.e/100);
+  return R('I = P / (k·V·cosφ·η)  (k=√3 سه‌فاز، k=1 تک‌فاز)','P='+v.P+' kW',['I = '+N(v.P*1000)+'/('+N(k)+'×'+v.V+'×'+v.pf+'×'+v.e/100+') = '+N(I)+' A'],[['جریان نامی بار',N(I),'A'],['توان ظاهری',N(k*v.V*I/1000),'kVA']],
+   ['این جریان کار دائم است، نه جریان راه‌اندازی؛ انتخاب کابل و حفاظت باید طبق استاندارد و هماهنگی حفاظتی انجام شود.'],'')}},
+{id:'bas',cat:'plc',name:'تبدیل مبنا (باینری، اکتال، دسیمال، هگزادسیمال)',desc:'تبدیل عدد صحیح نامنفی بین مبناهای ۲، ۸، ۱۰ و ۱۶',
+ f:[['b','مبنای عدد ورودی','',[['10','دسیمال (Decimal) — مبنای ۱۰'],['2','باینری (Binary) — مبنای ۲'],['8','اکتال (Octal) — مبنای ۸'],['16','هگزادسیمال (Hexadecimal) — مبنای ۱۶']]],['x','عدد صحیح نامنفی','','255','t']],
+ run(v){const B=+v.b,nm={10:'دسیمال',2:'باینری',8:'اکتال',16:'هگزادسیمال'}[B],ds={10:'0 تا 9',2:'0 و 1',8:'0 تا 7',16:'0 تا 9 و A تا F'}[B],pf={2:/^0[bB]/,8:/^0[oO]/,16:/^0[xX]/}[B];
+  let x=String(v.x).trim().replace(/[\s_,]/g,'');if(pf)x=x.replace(pf,'');
+  if(!x)throw Error('عدد را وارد کنید');
+  if(!{10:/^[0-9]+$/,2:/^[01]+$/,8:/^[0-7]+$/,16:/^[0-9a-fA-F]+$/}[B].test(x))throw Error('عدد برای مبنای «'+nm+'» معتبر نیست؛ فقط ارقام '+ds+' مجازند');
+  const n=BigInt(B===10?x:B===2?'0b'+x:B===8?'0o'+x:'0x'+x),bin=n.toString(2),grp=bin.padStart(Math.ceil(bin.length/4)*4,'0').match(/.{4}/g).join(' '),bits=bin.length,
+   ex=x.length<=16?x.toUpperCase().split('').map((c,i)=>(/[A-F]/.test(c)?c+'('+parseInt(c,16)+')':c)+'×'+B+'^'+(x.length-1-i)).join(' + ')+' = '+n:'';
+  return R('مقدار = Σ (رقم × مبنا^وزن رقم)','ورودی: '+x.toUpperCase()+' ('+nm+'، مبنای '+({2:'۲',8:'۸',10:'۱۰',16:'۱۶'}[B])+')',ex?['بسط: '+ex]:[],
+   [['دسیمال (Decimal، مبنای ۱۰)',n.toString(10),''],['باینری (Binary، مبنای ۲)',grp,''],['اکتال (Octal، مبنای ۸)',n.toString(8),''],['هگزادسیمال (Hex، مبنای ۱۶)',n.toString(16).toUpperCase(),''],['تعداد بیت لازم',String(bits),'bit'],['تعداد بایت لازم',String(Math.ceil(bits/8)),'byte']],[],
+   'بازگشت از هگزادسیمال به دسیمال: '+BigInt('0x'+n.toString(16))+' (باید با ورودی برابر باشد)')}},
+{id:'ub3',cat:'ckt',name:'مدار سه‌فاز نامتعادل (ستاره)',desc:'جریان فازها، جریان نول، جابه‌جایی نقطه صفر، توان',
+ f:[['w','اتصال','',[['4','ستاره با نول'],['3','ستاره بدون نول']]],['Vl','ولتاژ خط','V','400'],['Ra','Ra','Ω','10'],['Xa','Xa (سلفی +)','Ω','0'],['Rb','Rb','Ω','20'],['Xb','Xb','Ω','5'],['Rc','Rc','Ω','15'],['Xc','Xc','Ω','-5']],
+ run(v){req(v.Vl,'ولتاژ خط',{gt:0});
+  const cx=(r,i)=>({r,i}),ad=(a,b)=>cx(a.r+b.r,a.i+b.i),ml=(a,b)=>cx(a.r*b.r-a.i*b.i,a.r*b.i+a.i*b.r),dv=(a,b)=>{const d=b.r*b.r+b.i*b.i;return cx((a.r*b.r+a.i*b.i)/d,(a.i*b.r-a.r*b.i)/d)},ab=a=>Math.hypot(a.r,a.i),an=a=>Math.atan2(a.i,a.r)/D,pl=(m,g)=>cx(m*Math.cos(g*D),m*Math.sin(g*D));
+  const Vp=v.Vl/Math.sqrt(3),E=[pl(Vp,0),pl(Vp,-120),pl(Vp,120)],K=['a','b','c'],Z=K.map(k=>{req(v['R'+k],'R'+k,{ge:0});req(v['X'+k],'X'+k);const z=cx(v['R'+k],v['X'+k]);if(ab(z)<1e-9)throw Error('امپدانس فاز '+k+' نباید صفر باشد');return z});
+  let Vn=cx(0,0);if(v.w==='3'){let nu=cx(0,0),de=cx(0,0);Z.forEach((z,i)=>{const y=dv(cx(1,0),z);nu=ad(nu,ml(y,E[i]));de=ad(de,y)});Vn=dv(nu,de)}
+  const Vz=E.map(e=>cx(e.r-Vn.r,e.i-Vn.i)),I=Vz.map((e,i)=>dv(e,Z[i])),In=I.reduce(ad,cx(0,0)),res=[];let P=0,Q=0;
+  I.forEach((c,i)=>{const p=ab(c)**2*Z[i].r,q=ab(c)**2*Z[i].i;P+=p;Q+=q;res.push(['فاز '+K[i]+': |V| / |I| / ∠I',N(ab(Vz[i]))+' V | '+N(ab(c))+' A | '+N(an(c))+'°',''],['فاز '+K[i]+': P / Q',N(p)+' W | '+N(q)+' var','']);});
+  res.push(['جریان نول',N(ab(In)),'A'],['جابه‌جایی نقطه صفر',N(ab(Vn)),'V'],['P کل',N(P/1000),'kW'],['Q کل',N(Q/1000),'kvar']);
+  return R('Ik = (Ek − Vn)/Zk ، In = ΣIk ، (بدون نول) Vn = ΣYk·Ek / ΣYk','Vphase = '+N(Vp)+' V',['E = Vp∠0° ، Vp∠−120° ، Vp∠+120°','Vn = '+N(ab(Vn))+' V','In = '+N(ab(In))+' A'],res,v.w==='3'?['در سیم‌بندی بدون نول، ولتاژ فازها نامتعادل می‌شود و ممکن است به بار آسیب بزند.']:[],'جمع جریان‌ها (باید ≈ جریان نول باشد): '+N(ab(In))+' A ؛ P کل = Σ|I|²R = '+N(P)+' W')}},
+{id:'eco',cat:'sol',name:'اقتصاد نیروگاه خورشیدی',desc:'بازگشت سرمایه و سود با ارقام واردشده توسط شما',
+ f:[['P','توان نصب','kWp',''],['y','تولید ویژه سالانه (مقدار منطقه شما)','kWh/kWp',''],['c','هزینه کل سرمایه‌گذاری','واحد پول',''],['o','هزینه نگهداری سالانه','% سرمایه','1'],['t','قیمت/تعرفه هر kWh','واحد پول',''],['d','افت سالانه تولید','%','0.5'],['n','افق محاسبه','سال','20']],
+ run(v){['P','y','c','t'].forEach(k=>req(v[k],k,{gt:0}));req(v.o,'نگهداری',{ge:0});req(v.d,'افت',{ge:0,le:100});req(v.n,'افق',{gt:0,le:50});
+  const n=Math.round(v.n),E1=v.P*v.y,om=v.c*v.o/100;let cum=-v.c,pb=null,Et=0,Rt=0;
+  for(let k=1;k<=n;k++){const E=E1*Math.pow(1-v.d/100,k-1),net=E*v.t-om;Et+=E;Rt+=E*v.t;if(pb===null&&cum+net>=0)pb=k-1+(-cum)/net;cum+=net}
+  return R('E_k = P·y·(1−d)^(k−1) ، Net_k = E_k·t − O&M ، پایان سال بازگشت: Σ Net_k ≥ C','ورودی‌های کاربر؛ تاریخ برآورد: '+new Date().toISOString().slice(0,10),['تولید سال اول = '+N(E1)+' kWh','نگهداری سالانه = '+N(om)],
+   [['تولید سال اول',N(E1),'kWh'],['درآمد سال اول',N(E1*v.t),''],['دوره بازگشت ساده',pb===null?'در افق انتخابی بازنمی‌گردد':N(pb),pb===null?'':'سال'],['تولید کل در افق',N(Et),'kWh'],['سود خالص تا پایان افق',N(cum),'']],
+   ['قیمت‌ها و تولید را خودتان وارد کرده‌اید؛ تورم، نرخ تنزیل، تعویض اینورتر و تعرفه متغیر لحاظ نشده است.'],'')}},
+{id:'mst',cat:'ind',name:'جریان راه‌اندازی موتور و روش‌ها',desc:'مستقیم، ستاره‌مثلث، راه‌انداز نرم',
+ f:[['P','توان خروجی','kW',''],['V','ولتاژ خط','V','400'],['pf','ضریب توان','','0.85'],['e','راندمان','%','90'],['cn','اتصال سیم‌پیچ موتور در حالت کار','',[['d','مثلث (Δ)'],['y','ستاره (Y)']]],['k','نسبت Ist/In (از کاتالوگ)','','6'],['s','ولتاژ اولیه راه‌انداز نرم','%','60']],
+ run(v){req(v.P,'توان',{gt:0});req(v.V,'V',{gt:0});req(v.pf,'ضریب توان',{gt:0,le:1});req(v.e,'راندمان',{gt:0,le:100});req(v.k,'k',{gt:1});req(v.s,'s',{gt:0,le:100});
+  const In=v.P*1000/(Math.sqrt(3)*v.V*v.pf*v.e/100),Id=v.k*In,sf=v.s/100;
+  return R('In = P/(√3·V·cosφ·η) ، Ist,Y∆ = Ist/3 ، Ist,soft ≈ Ist·(U/Un)','P='+v.P+' kW ، k='+v.k,['In = '+N(In)+' A','مستقیم: '+N(Id)+' A'],
+   [['جریان نامی',N(In),'A'],['مستقیم: جریان / گشتاور',N(Id)+' A | ×1',''],['ستاره‌مثلث: جریان / گشتاور',N(Id/3)+' A | ×0.33',''],['راه‌انداز نرم: جریان / گشتاور',N(Id*sf)+' A | ×'+N(sf*sf),'']],
+   ['ضریب Ist/In و گشتاور تقریبی‌اند؛ انتخاب کنتاکتور، رله و کلید حفاظتی باید با کاتالوگ، منحنی قطع و استاندارد مربوط انجام شود.'],'')}},
+{id:'isc',cat:'pwr',pop:1,name:'جریان اتصال کوتاه پشت ترانس',desc:'برآورد حداکثر جریان اتصال کوتاه سه‌فاز',
+ f:[['S','توان نامی','kVA','630'],['V','ولتاژ ثانویه (خط)','V','400'],['u','ولتاژ اتصال کوتاه uk','%','4']],
+ run(v){req(v.S,'S',{gt:0});req(v.V,'V',{gt:0});req(v.u,'uk',{gt:0,le:100});
+  const In=v.S*1000/(Math.sqrt(3)*v.V),Isc=In*100/v.u;
+  return R('In = S/(√3·V) ، Isc = In/(uk/100)','S='+v.S+' kVA ، uk='+v.u+'%',['In = '+N(In)+' A','Isc = '+N(In)+'×100/'+v.u+' = '+N(Isc)+' A'],[['جریان نامی ثانویه',N(In),'A'],['اتصال کوتاه سه‌فاز',N(Isc/1000),'kA']],
+   ['شبکه بالادست بی‌نهایت فرض شده؛ امپدانس کابل/باسبار و سهم موتورها لحاظ نشده است. ظرفیت قطع کلید را با داده‌های واقعی شبکه تأیید کنید.'],'')}},
+{id:'rip',cat:'ele',name:'ریپل یکسوساز با فیلتر خازنی',desc:'ریپل و ولتاژ DC تقریبی',
+ f:[['t','نوع','',[['f','تمام‌موج'],['h','نیم‌موج']]],['Vp','ولتاژ پیک ثانویه','V',''],['f','فرکانس شبکه','Hz','50'],['I','جریان بار','A',''],['C','خازن','µF',''],['vd','افت دیود(ها)','V','1.4']],
+ run(v){['Vp','f','I','C'].forEach(k=>req(v[k],k,{gt:0}));req(v.vd,'افت دیود',{ge:0});
+  const fr=(v.t==='f'?2:1)*v.f,Vr=v.I/(fr*v.C*1e-6),Vm=v.Vp-v.vd;if(Vm<=0||Vr>=Vm)throw Error('ریپل بزرگ‌تر از ولتاژ پیک است؛ ظرفیت خازن را افزایش دهید');
+  const Vdc=Vm-Vr/2;
+  return R('Vr ≈ I/(fr·C) ، Vdc ≈ (Vp − Vd) − Vr/2','fr = '+fr+' Hz',['Vr = '+N(v.I)+'/('+fr+'×'+N(v.C*1e-6)+') = '+N(Vr)+' V'],[['ریپل پیک‌تاپیک',N(Vr),'V'],['ولتاژ DC میانگین',N(Vdc),'V'],['ریپل نسبی',N(Vr/Vdc*100),'%']],['مدل تقریبی با جریان بار ثابت؛ جریان هجومی دیود و مقاومت ترانس لحاظ نشده است.'],'')}},
+{id:'cpx',cat:'mth',name:'اعداد مختلط',desc:'چهار عمل و نمایش قطبی/دکارتی',
+ f:[['ar','A: بخش حقیقی','','3'],['ai','A: بخش موهومی','','4'],['br','B: بخش حقیقی','','1'],['bi','B: بخش موهومی','','-2']],
+ run(v){['ar','ai','br','bi'].forEach(k=>req(v[k],k));
+  const P=(r,i)=>N(Math.hypot(r,i))+' ∠ '+N(Math.atan2(i,r)/D)+'°',F=(r,i)=>N(r)+(i<0?' − j':' + j')+N(Math.abs(i)),a=v.ar,b=v.ai,c=v.br,d=v.bi,q=c*c+d*d,
+   res=[['A',F(a,b),''],['A قطبی',P(a,b),''],['B',F(c,d),''],['B قطبی',P(c,d),''],['A + B',F(a+c,b+d),''],['A − B',F(a-c,b-d),''],['A × B',F(a*c-b*d,a*d+b*c),''],['A × B قطبی',P(a*c-b*d,a*d+b*c),'']],w=[];
+  if(q===0)w.push('B صفر است؛ تقسیم تعریف‌نشده است.');else res.push(['A ÷ B',F((a*c+b*d)/q,(b*c-a*d)/q),''],['A ÷ B قطبی',P((a*c+b*d)/q,(b*c-a*d)/q),'']);
+  return R('|Z| = √(x²+y²) ، θ = atan2(y,x) ، (a+jb)(c+jd) = (ac−bd) + j(ad+bc) ، A/B = A·B*/|B|²','A = '+F(a,b)+' ، B = '+F(c,d),['|A| = '+N(Math.hypot(a,b)),'|B| = '+N(Math.hypot(c,d))],res,w,'|A×B| = '+N(Math.hypot(a*c-b*d,a*d+b*c))+' و |A|·|B| = '+N(Math.hypot(a,b)*Math.hypot(c,d))+' باید برابر باشند.')}},
+{id:'lin',cat:'mth',pop:1,name:'حل دستگاه معادلات خطی (Ax=b)',desc:'ماتریس افزوده تا ۸ مجهول، دترمینان و کنترل باقیمانده',
+ f:[['M','ماتریس افزوده [A|b]، هر خط یک معادله','','2 1 -1 8\n-3 -1 2 -11\n-2 1 2 -3','ta']],
+ run(v){const O=String(v.M).split('\n').map(s=>s.trim()).filter(Boolean).map(s=>s.split(/[\s,،]+/).map(Number)),n=O.length;
+  if(n<1||n>8||O.some(r=>r.length!==n+1||r.some(isNaN)))throw Error('ماتریس باید n سطر و n+1 ستون عددی داشته باشد (حداکثر n=۸)');
+  const A=O.map(r=>r.slice());let det=1;
+  for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;
+   if(Math.abs(A[p][c])<1e-12)throw Error('ماتریس تکین است (دترمینان صفر)؛ جواب یکتا وجود ندارد.');
+   if(p!==c){[A[c],A[p]]=[A[p],A[c]];det=-det}det*=A[c][c];
+   for(let r=0;r<n;r++)if(r!==c){const f=A[r][c]/A[c][c];for(let k=c;k<=n;k++)A[r][k]-=f*A[c][k]}}
+  const x=A.map((r,i)=>r[n]/r[i]),res=x.map((q,i)=>['x'+(i+1),N(q),'']);res.push(['دترمینان A',N(det),'']);
+  const rs=Math.max(...O.map(r=>Math.abs(r.slice(0,n).reduce((s,a,j)=>s+a*x[j],0)-r[n])));
+  return R('حذف گاوس–جردن با محور جزئی ، det(A) = ± حاصل‌ضرب محورها','n = '+n,['ماتریس افزوده → ماتریس همانی با حذف گاوس–جردن'],res,Math.abs(det)<1e-6?['دترمینان بسیار کوچک است؛ دستگاه بدحالت (ill-conditioned) است و دقت نتیجه پایین می‌آید.']:[],'بیشترین باقیمانده |Ax − b| = '+N(rs))}},
+{id:'dcd',cat:'ele',name:'مبدل DC-DC (باک / بوست / باک‌بوست)',desc:'دیوتی، ریپل جریان سلف و ولتاژ، سلف بحرانی',
+ f:[['t','نوع','',[['b','باک'],['u','بوست'],['x','باک‌بوست معکوس']]],['Vi','ولتاژ ورودی','V','24'],['Vo','ولتاژ خروجی (اندازه)','V','12'],['fs','فرکانس کلیدزنی','kHz','100'],['Io','جریان خروجی','A','2'],['L','سلف','µH','47'],['C','خازن خروجی','µF','100']],
+ run(v){['Vi','Vo','fs','Io','L','C'].forEach(k=>req(v[k],k,{gt:0}));
+  const f=v.fs*1e3,L=v.L*1e-6,C=v.C*1e-6;let D,IL,dI,dV,Lc;
+  if(v.t==='b'){if(v.Vo>=v.Vi)throw Error('در باک، Vo باید کمتر از Vi باشد');D=v.Vo/v.Vi;IL=v.Io;dI=(v.Vi-v.Vo)*D/(L*f);dV=dI/(8*f*C)}
+  else{if(v.t==='u'){if(v.Vo<=v.Vi)throw Error('در بوست، Vo باید بیشتر از Vi باشد');D=1-v.Vi/v.Vo}else D=v.Vo/(v.Vi+v.Vo);IL=v.Io/(1-D);dI=v.Vi*D/(L*f);dV=v.Io*D/(f*C)}
+  Lc=(v.t==='b'?(v.Vi-v.Vo)*D/(2*f*v.Io):v.Vi*D/(2*f*IL))*1e6;const w=['مدل ایده‌آل: تلفات کلید، دیود و ESR خازن لحاظ نشده است.'];
+  if(dI/2>IL)w.push('ΔIL/2 > IL: مبدل در حالت DCM است و فرمول‌های CCM معتبر نیست.');
+  return R('باک: D=Vo/Vi ؛ بوست: D=1−Vi/Vo ؛ باک‌بوست: D=Vo/(Vi+Vo) ؛ ΔIL و ΔVo طبق نوع مبدل','Vi='+v.Vi+' V ، Vo='+v.Vo+' V ، fs='+v.fs+' kHz',['D = '+N(D),'IL(avg) = '+N(IL)+' A','ΔIL = '+N(dI)+' A'],
+   [['دیوتی D',N(D*100),'%'],['جریان متوسط سلف',N(IL),'A'],['ریپل جریان سلف',N(dI),'A'],['جریان پیک سلف',N(IL+dI/2),'A'],['ریپل ولتاژ خروجی',N(dV*1000),'mV'],['حداقل سلف برای CCM',N(Lc),'µH']],w,'')}},
+{id:'ear',cat:'prt',name:'مقاومت الکترود ارت (میله عمودی)',desc:'مقاومت زمین و ولتاژ تماس تخمینی',
+ f:[['r','مقاومت مخصوص خاک (اندازه‌گیری‌شده)','Ω·m','100'],['L','طول میله مدفون','m','3'],['d','قطر میله','mm','16'],['n','تعداد میله','','1'],['s','فاصله بین میله‌ها','m','6'],['Ig','جریان خطای زمین (اختیاری)','A','']],
+ run(v){req(v.r,'ρ',{gt:0});req(v.L,'L',{gt:0});req(v.d,'قطر',{gt:0});req(v.n,'تعداد میله',{ge:1});const a=v.d/2000;if(v.L<=4*a)throw Error('طول میله باید خیلی بزرگ‌تر از قطر باشد');
+  const n=Math.round(v.n),R1=v.r/(2*Math.PI*v.L)*Math.log(4*v.L/a),Rn=R1/n,w=['ρ خاک با فصل و رطوبت تغییر می‌کند؛ مقدار نهایی باید روی محل اندازه‌گیری شود و حد مجاز طبق مقررات/استاندارد معتبر است.'],res=[['یک میله',N(R1),'Ω'],['مجموع '+n+' میله (ایده‌آل)',N(Rn),'Ω']];
+  if(n>1&&v.s<2*v.L)w.push('فاصله کمتر از دو برابر طول میله است؛ اثر متقابل مقاومت واقعی را بیشتر از حالت ایده‌آل می‌کند.');
+  if(v.Ig!==null&&!isNaN(v.Ig)){req(v.Ig,'Ig',{gt:0});res.push(['افزایش پتانسیل الکترود',N(v.Ig*Rn),'V'])}
+  return R('R = ρ/(2πL)·ln(4L/a) (میله عمودی) ، n میله ایده‌آل: R/n','ρ='+v.r+' Ω·m ، L='+v.L+' m',['a = '+N(a)+' m','R(یک میله) = '+N(R1)+' Ω'],res,w,'')}},
+{id:'mbs',cat:'plc',name:'زمان‌بندی Modbus RTU',desc:'زمان یک تراکنش خواندن رجیستر (تابع ۰۳)',
+ f:[['b','نرخ باود','bps','9600'],['N','تعداد رجیستر','','10'],['ta','تأخیر پاسخ دستگاه','ms','5']],
+ run(v){req(v.b,'باود',{gt:0});req(v.N,'N',{gt:0,le:125});req(v.ta,'تأخیر',{ge:0});const N2=Math.round(v.N),tc=11/v.b,t35=v.b>19200?0.00175:3.5*tc,by=8+5+2*N2,T=by*tc+2*t35+v.ta/1000;
+  return R('هر کاراکتر RTU = ۱۱ بیت ، t3.5 = 3.5·tc (برای باود > 19200 برابر 1.75ms) ، T = بایت‌ها·tc + 2·t3.5 + تأخیر','باود='+v.b+' ، N='+N2,['درخواست ۸ بایت + پاسخ '+(5+2*N2)+' بایت','tc = '+N(tc*1000)+' ms'],[['زمان یک کاراکتر',N(tc*1000),'ms'],['زمان کل تراکنش',N(T*1000),'ms'],['حداکثر تراکنش در ثانیه',N(1/T),'']],['زمان تأخیر دستگاه، سرعت پردازش مستر و خطاها لحاظ نشده است.'],'')}},
+{id:'syn',cat:'mac',name:'ماشین سنکرون (روتور استوانه‌ای)',desc:'نیروی محرکه، زاویه بار، توان و سرعت سنکرون',
+ f:[['m','حالت','',[['g','ژنراتور'],['m','موتور']]],['Vl','ولتاژ پایانه (خط)','V','400'],['I','جریان خط','A',''],['pf','ضریب توان','','0.8'],['t','نوع جریان','',[['l','پس‌فاز (سلفی)'],['c','پیش‌فاز (خازنی)']]],['Xs','راکتانس سنکرون هر فاز','Ω',''],['Ra','مقاومت آرمیچر هر فاز','Ω','0'],['f','فرکانس','Hz','50'],['p','تعداد قطب','','4']],
+ run(v){['Vl','I','Xs','f','p'].forEach(k=>req(v[k],k,{gt:0}));req(v.pf,'ضریب توان',{gt:0,le:1});req(v.Ra,'Ra',{ge:0});if(v.p%2)throw Error('تعداد قطب باید زوج باشد');
+  const Vp=v.Vl/Math.sqrt(3),th=Math.acos(v.pf)*(v.t==='l'?-1:1),Ir=v.I*Math.cos(th),Ii=v.I*Math.sin(th),zr=v.Ra*Ir-v.Xs*Ii,zi=v.Ra*Ii+v.Xs*Ir,s=v.m==='g'?1:-1,Er=Vp+s*zr,Ei=s*zi,Ea=Math.hypot(Er,Ei),dl=Math.atan2(Ei,Er)/D,P=3*Vp*v.I*v.pf,Q=-3*Vp*v.I*Math.sin(th),Pc=3*(Er*Ir+Ei*Ii),ns=120*v.f/v.p;
+  return R(v.m==='g'?'Ea = Vp + I·(Ra + jXs)':'Ea = Vp − I·(Ra + jXs)','Vp = '+N(Vp)+' V ، I = '+v.I+' A ، cosφ = '+v.pf,['Ea = '+N(Ea)+' V (هر فاز) ∠ '+N(dl)+'°','ns = 120f/p = '+N(ns)+' rpm'],
+   [['Ea هر فاز',N(Ea),'V'],['Ea خط (ستاره)',N(Ea*Math.sqrt(3)),'V'],['زاویه بار δ',N(dl),'°'],['P',N(P/1000),'kW'],['Q (مثبت=سلفی)',N(Q/1000),'kvar'],['S',N(3*Vp*v.I/1000),'kVA'],['توان الکترومغناطیسی',N(Pc/1000),'kW'],['سرعت سنکرون',N(ns),'rpm']],
+   ['روتور استوانه‌ای، اتصال ستاره و بدون اشباع فرض شده است؛ ماشین قطب برجسته و منحنی مغناطیس‌شوندگی لحاظ نشده است.'],'P + 3I²Ra (ژنراتور) یا P − 3I²Ra (موتور) = '+N((P+s*3*v.I*v.I*v.Ra)/1000)+' kW باید با توان الکترومغناطیسی '+N(Pc/1000)+' kW برابر باشد.')}},
+{id:'sym',cat:'pwr',name:'مؤلفه‌های متقارن (توالی)',desc:'تجزیه سه فازور به توالی صفر، مثبت و منفی',
+ f:[['Ma','دامنه فاز a','','100'],['Aa','زاویه فاز a','°','0'],['Mb','دامنه فاز b','','80'],['Ab','زاویه فاز b','°','-130'],['Mc','دامنه فاز c','','110'],['Ac','زاویه فاز c','°','115']],
+ run(v){['Ma','Mb','Mc'].forEach(k=>req(v[k],k,{ge:0}));['Aa','Ab','Ac'].forEach(k=>req(v[k],k));
+  const cx=(m,g)=>[m*Math.cos(g*D),m*Math.sin(g*D)],A=cx(v.Ma,v.Aa),B=cx(v.Mb,v.Ab),C=cx(v.Mc,v.Ac),a=cx(1,120),a2=cx(1,240),ml=(x,y)=>[x[0]*y[0]-x[1]*y[1],x[0]*y[1]+x[1]*y[0]],ad=(...z)=>z.reduce((p,q)=>[p[0]+q[0],p[1]+q[1]],[0,0]),sc=(x,k)=>[x[0]*k,x[1]*k],mg=x=>Math.hypot(x[0],x[1]),an=x=>mg(x)<1e-9?0:Math.atan2(x[1],x[0])/D,
+   X0=sc(ad(A,B,C),1/3),X1=sc(ad(A,ml(a,B),ml(a2,C)),1/3),X2=sc(ad(A,ml(a2,B),ml(a,C)),1/3),F=x=>mg(x)<1e-9?'0':N(mg(x))+' ∠ '+N(an(x))+'°',w=[];
+  if(mg(A)+mg(B)+mg(C)<1e-9)throw Error('هر سه فازور صفرند');
+  const res=[['توالی صفر',F(X0),''],['توالی مثبت',F(X1),''],['توالی منفی',F(X2),'']];
+  if(mg(X1)>1e-9)res.push(['نامتعادلی منفی |X2|/|X1|',N(+(mg(X2)/mg(X1)*100).toFixed(9)),'%'],['نامتعادلی صفر |X0|/|X1|',N(+(mg(X0)/mg(X1)*100).toFixed(9)),'%']);else w.push('توالی مثبت صفر است؛ نسبت‌های نامتعادلی تعریف‌نشده‌اند.');
+  return R('X0 = (Xa+Xb+Xc)/3 ، X1 = (Xa+aXb+a²Xc)/3 ، X2 = (Xa+a²Xb+aXc)/3 ، a = 1∠120°','a = '+F(A)+' ، b = '+F(B)+' ، c = '+F(C),['بازسازی: Xa = X0+X1+X2'],res,w.concat(['فقط تجزیه فازورهای واردشده است؛ تحلیل کامل خطای نامتقارن شبکه هنوز پیاده نشده است.']),'X0+X1+X2 = '+F(ad(X0,X1,X2))+' باید با فازور a برابر باشد.')}},
+{id:'so2',cat:'ckt',name:'سیستم مرتبه دوم: قطب‌ها و پاسخ پله',desc:'H(s) = Kωn²/(s²+2ζωn·s+ωn²)',
+ f:[['K','بهره DC','','1'],['wn','فرکانس طبیعی ωn','rad/s','10'],['z','ضریب میرایی ζ','','0.5']],
+ run(v){req(v.K,'K');req(v.wn,'ωn',{gt:0});req(v.z,'ζ',{ge:0});const z=v.z,w=v.wn,res=[],wr=[];let ty,po,st=[];
+  if(z===0){ty='بدون میرایی (نوسان خالص)';po='±j'+N(w);res.push(['اورشوت',N(100),'%'])}
+  else if(z<1){const wd=w*Math.sqrt(1-z*z);ty='زیرمیرا';po=N(-z*w)+' ± j'+N(wd);res.push(['اورشوت',N(100*Math.exp(-Math.PI*z/Math.sqrt(1-z*z))),'%'],['زمان قله',N(Math.PI/wd),'s'],['زمان نشست ۲٪ (تقریبی)',N(4/(z*w)),'s']);st.push('σ = ζωn = '+N(z*w)+' ، ωd = '+N(wd))}
+  else if(Math.abs(z-1)<1e-9){ty='میرایی بحرانی';po=N(-w)+' (مضاعف)';res.push(['اورشوت','0','%'],['زمان نشست ۲٪ (تقریبی)',N(5.83/w),'s'])}
+  else{const r=w*Math.sqrt(z*z-1);ty='فوق‌میرا';po=N(-z*w+r)+' و '+N(-z*w-r);res.push(['اورشوت','0','%'],['زمان نشست ۲٪ (تقریبی)',N(4/(z*w-r)),'s']);wr.push('زمان نشست بر پایه قطب غالب (کندتر) برآورد شده است.')}
+  res.unshift(['نوع پاسخ',ty,''],['قطب‌ها',po,''],['مقدار نهایی پله',N(v.K),'']);if(z===0)wr.push('سیستم پایدار مجانبی نیست؛ پاسخ پله برای همیشه نوسان می‌کند.');
+  return R('H(s) = Kωn²/(s² + 2ζωn·s + ωn²) ، Mp = exp(−πζ/√(1−ζ²)) ، tp = π/ωd ، ts ≈ 4/(ζωn)','K='+v.K+' ، ωn='+v.wn+' ، ζ='+z,st,res,wr,'حاصل‌ضرب قطب‌ها = ωn² = '+N(w*w))}},
+{id:'bld',cat:'bld',name:'برآورد بار ساختمان',desc:'روشنایی، پریز و بار ثابت با ضرایب تقاضا و همزمانی',
+ f:[['A','مساحت','m²',''],['wl','توان روشنایی','W/m²','10'],['dl','ضریب تقاضای روشنایی','%','100'],['ns','تعداد پریز','',''],['ws','توان هر پریز','W','200'],['ds','ضریب تقاضای پریز','%','50'],['of','بارهای ثابت دیگر','kW','0'],['sf','ضریب همزمانی کل','%','80'],['k','سیستم','',[['3','سه‌فاز'],['1','تک‌فاز']]],['V','ولتاژ (خط/فاز)','V','400'],['pf','ضریب توان','','0.9']],
+ run(v){req(v.A,'مساحت',{ge:0});req(v.ns,'تعداد پریز',{ge:0});['wl','ws','of'].forEach(k=>req(v[k],k,{ge:0}));['dl','ds','sf'].forEach(k=>req(v[k],k,{gt:0,le:100}));req(v.V,'V',{gt:0});req(v.pf,'ضریب توان',{gt:0,le:1});
+  const Pl=v.A*v.wl/1000*v.dl/100,Ps=v.ns*v.ws/1000*v.ds/100,Pt=(Pl+Ps+v.of)*v.sf/100;if(Pt<=0)throw Error('بار کل صفر است؛ مساحت، تعداد پریز یا بار ثابت را وارد کنید');
+  const k=v.k==='3'?Math.sqrt(3):1,I=Pt*1000/(k*v.V*v.pf);
+  return R('P = (P_روشنایی·Dl + P_پریز·Ds + P_ثابت)·Sf ، I = P/(k·V·cosφ)','A='+v.A+' m²',['روشنایی = '+N(Pl)+' kW','پریز = '+N(Ps)+' kW','ثابت = '+N(v.of)+' kW'],
+   [['بار روشنایی',N(Pl),'kW'],['بار پریز',N(Ps),'kW'],['بار ثابت',N(v.of),'kW'],['بار کل (پس از همزمانی)',N(Pt),'kW'],['توان ظاهری',N(Pt/v.pf),'kVA'],['جریان کل',N(I),'A']],
+   ['مقادیر پیش‌فرض (W/m²، ضرایب تقاضا و همزمانی) نمونه‌اند؛ آن‌ها را طبق مقررات ملی ساختمان و ضوابط پروژه تعیین کنید. انتخاب نهایی کابل و کلید در این ابزار انجام نمی‌شود.'],'')}},
+{id:'mesh',cat:'ckt',pop:1,name:'تحلیل مش (حلقه‌های تعریف‌شده)',desc:'جریان مش‌ها، شاخه‌ها و کنترل KVL برای مدار مسطح',
+ f:[['L','مش‌ها (همه ساعتگرد). مقاومت: «نام مش‌اول مش‌دوم مقدار» (۰ = بیرون، مشترک = دو مش). منبع: «نام مش مقدار» (مثبت یعنی جریان ساعتگرد را می‌راند)','','R1 1 0 100\nR2 1 2 220\nR3 2 0 330\nV1 1 12','ta']],
+ run(v){const U={k:1e3,K:1e3,M:1e6,m:1e-3,u:1e-6,'µ':1e-6,n:1e-9},E=[];
+  String(v.L).split('\n').map(s=>s.trim()).filter(s=>s&&!/^[*#]/.test(s)).forEach((s,i)=>{const p=s.split(/\s+/),t=p[0][0].toUpperCase(),vs=t==='V',nt=vs?3:4,e='خط '+(i+1)+': ';
+   if(t==='I')throw Error(e+'منبع جریان در تحلیل مش پشتیبانی نمی‌شود (نیاز به سوپرمش)؛ از «حل مدار DC» استفاده کنید');
+   if(t!=='R'&&!vs)throw Error(e+'نام المان باید با R یا V شروع شود');
+   if(p.length!==nt)throw Error(e+(vs?'قالب V: «نام مش مقدار»':'قالب R: «نام مش‌اول مش‌دوم مقدار»'));
+   const m=p[nt-1].match(/^(-?\d*\.?\d+(?:[eE][-+]?\d+)?)([kKMmuµn]?)$/);if(!m)throw Error(e+'مقدار نامعتبر است');
+   const val=+m[1]*(U[m[2]]||1),ms=p.slice(1,nt-1);
+   if(ms.some(x=>!/^[0-9]+$/.test(x)))throw Error(e+'شماره مش باید عدد صحیح باشد (۰ = بیرون)');
+   if(!vs&&!(val>0))throw Error(e+'مقاومت باید مثبت باشد');
+   if(vs&&ms[0]==='0')throw Error(e+'منبع باید در یک مش باشد');
+   if(!vs){if(ms[0]===ms[1])throw Error(e+'دو مش یکسان است');if(ms[0]==='0')ms.reverse()}
+   if(E.some(x=>x.n===p[0]))throw Error(e+'نام تکراری');E.push({n:p[0],t,m:ms.map(Number),val})});
+  const ids=[...new Set(E.flatMap(e=>e.m).filter(x=>x>0))].sort((a,b)=>a-b),n=ids.length,ix=x=>ids.indexOf(x);if(!n)throw Error('هیچ مشی تعریف نشده است');
+  const A=Array.from({length:n},()=>Array(n).fill(0)),b=Array(n).fill(0);
+  E.forEach(e=>{if(e.t==='V')b[ix(e.m[0])]+=e.val;else{const[a,c]=e.m;A[ix(a)][ix(a)]+=e.val;if(c>0){A[ix(c)][ix(c)]+=e.val;A[ix(a)][ix(c)]-=e.val;A[ix(c)][ix(a)]-=e.val}}});
+  if(A.some((r,i)=>r[i]<=0))throw Error('هر مش باید حداقل یک مقاومت داشته باشد');
+  const M=A.map((r,i)=>[...r,b[i]]);
+  for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;if(Math.abs(M[p][c])<1e-12)throw Error('دستگاه معادلات مش ناسازگار است');[M[c],M[p]]=[M[p],M[c]];for(let r=0;r<n;r++)if(r!==c){const f=M[r][c]/M[c][c];for(let k=c;k<=n;k++)M[r][k]-=f*M[c][k]}}
+  const I=M.map((r,i)=>r[n]/r[i]),res=ids.map((id,i)=>['I مش '+id,N(I[i]),'A']);let Pd=0,Ps=0;
+  E.forEach(e=>{if(e.t==='V'){const i=I[ix(e.m[0])],p=e.val*i;Ps+=p;res.push([e.n+' (منبع)',N(i)+' A | '+N(p)+' W',''])}else{const[a,c]=e.m,i=I[ix(a)]-(c>0?I[ix(c)]:0),p=i*i*e.val;Pd+=p;res.push([e.n,N(i)+' A | '+N(p)+' W',''])}});
+  const kv=Math.max(...A.map((r,i)=>Math.abs(r.reduce((s,a,j)=>s+a*I[j],0)-b[i]))),st=n<=6?['ماتریس [R | V] برای مش‌های '+ids.join('، ')+':'].concat(A.map((r,i)=>r.map(N).join('  ')+'  |  '+N(b[i]))):[];
+  return R('برای هر مش: ΣR_ii·I_i − ΣR_ij·I_j = ΣV_i (KVL)','مش‌ها: '+n+' ، المان‌ها: '+E.length,st,res,['جهت جریان مقاومت‌ها همان جهت مش اول آن است؛ توان منبع مثبت = تولید. مش‌ها را خودتان با جهت ساعتگرد و برای مدار مسطح تعریف کنید.'],'KVL: بیشترین باقیمانده = '+N(kv)+' V ؛ تولید '+N(Ps)+' W باید با مصرف '+N(Pd)+' W برابر باشد.')}},
+{id:'rlt',cat:'ckt',pop:1,name:'پاسخ پله RLC سری',desc:'نوع میرایی، ولتاژ خازن و جریان در لحظه t',
+ f:[['V','ولتاژ پله','V','12'],['R','مقاومت','Ω','10'],['L','سلف','mH','10'],['C','خازن','µF','100'],['tm','زمان t','ms','1']],
+ run(v){req(v.V,'V');req(v.R,'R',{gt:0});req(v.L,'L',{gt:0});req(v.C,'C',{gt:0});req(v.tm,'t',{ge:0});
+  const L=v.L*1e-3,C=v.C*1e-6,t=v.tm*1e-3,a=v.R/(2*L),w0=1/Math.sqrt(L*C),z=a/w0,V=v.V,u=z<1-1e-9,c=Math.abs(z-1)<=1e-9;
+  const fn=q=>{if(u){const wd=Math.sqrt(w0*w0-a*a),e=Math.exp(-a*q);return[V*(1-e*(Math.cos(wd*q)+a/wd*Math.sin(wd*q))),V/(wd*L)*e*Math.sin(wd*q)]}
+   if(c){const e=Math.exp(-a*q);return[V*(1-e*(1+a*q)),V/L*q*e]}
+   const b=Math.sqrt(a*a-w0*w0),s1=-a+b,s2=-a-b;return[V*(1+(s2*Math.exp(s1*q)-s1*Math.exp(s2*q))/(s1-s2)),V/(L*(s1-s2))*(Math.exp(s1*q)-Math.exp(s2*q))]};
+  const[vc,i]=fn(t),h=1e-5/w0,res=[['نوع پاسخ',u?'زیرمیرا':c?'میرایی بحرانی':'فوق‌میرا',''],['α = R/2L',N(a),'1/s'],['ω0 = 1/√LC',N(w0),'rad/s'],['ضریب میرایی ζ',N(z),''],['v_C(t)',N(vc),'V'],['i(t)',N(i),'A']];
+  if(u)res.push(['اورشوت',N(100*Math.exp(-Math.PI*a/Math.sqrt(w0*w0-a*a))),'%']);res.push(['زمان نشست ≈ 4/α',N(4/a*1000),'ms']);
+  let ck='برای t خیلی کوچک کنترل KVL انجام نشد.';if(t>2*h){const di=(fn(t+h)[1]-fn(t-h)[1])/(2*h);ck='KVL: V − (v_C + R·i + L·di/dt) = '+N(V-(vc+v.R*i+L*di))+' V (باید ≈ 0 باشد)'}
+  return R('v_C\'\' + 2α v_C\' + ω0² v_C = ω0² V ، شرایط اولیه صفر','V='+V+' ، R='+v.R+' ، L='+v.L+' mH ، C='+v.C+' µF',['α = '+N(a)+' ، ω0 = '+N(w0)+' ⇒ ζ = '+N(z)],res,['شرایط اولیه خازن و سلف صفر فرض شده است.'],ck)}},
+{id:'dcg',cat:'mac',name:'ژنراتور DC: نیروی محرکه و راندمان',desc:'تحریک مستقل یا شنت',
+ f:[['t','نوع تحریک','',[['s','مستقل'],['h','شنت']]],['Vt','ولتاژ پایانه','V','230'],['IL','جریان بار','A','50'],['Ra','مقاومت آرمیچر','Ω','0.2'],['Rf','مقاومت میدان (فقط شنت)','Ω','115'],['n','سرعت','rpm','1500'],['Pr','تلفات چرخشی','W','300']],
+ run(v){req(v.Vt,'Vt',{gt:0});req(v.IL,'IL',{gt:0});req(v.Ra,'Ra',{ge:0});req(v.n,'n',{gt:0});req(v.Pr,'تلفات چرخشی',{ge:0});if(v.t==='h')req(v.Rf,'Rf',{gt:0});
+  const If=v.t==='h'?v.Vt/v.Rf:0,Ia=v.IL+If,Ea=v.Vt+Ia*v.Ra,Pc=Ea*Ia,Po=v.Vt*v.IL,Pin=Pc+v.Pr,w=2*Math.PI*v.n/60,res=[];
+  if(If)res.push(['جریان میدان',N(If),'A']);res.push(['جریان آرمیچر',N(Ia),'A'],['نیروی محرکه Ea',N(Ea),'V'],['توان تبدیلی',N(Pc),'W'],['توان خروجی',N(Po),'W'],['توان مکانیکی ورودی',N(Pin),'W'],['راندمان',N(Po/Pin*100),'%'],['گشتاور الکترومغناطیسی',N(Pc/w),'N·m'],['گشتاور شفت',N(Pin/w),'N·m']);
+  return R('Ea = Vt + Ia·Ra ، Ia = IL (مستقل) یا IL + Vt/Rf (شنت) ، η = Pout/(Pconv + Prot)','Vt='+v.Vt+' V ، IL='+v.IL+' A',['Ia = '+N(Ia)+' A','Ea = '+v.Vt+' + '+N(Ia)+'×'+v.Ra+' = '+N(Ea)+' V'],res,v.t==='s'?['توان تحریک مستقل در راندمان لحاظ نشده است.']:[],'Pout + Ia²Ra + Vt·If + Prot = '+N(Po+Ia*Ia*v.Ra+v.Vt*If+v.Pr)+' W باید با ورودی مکانیکی '+N(Pin)+' W برابر باشد.')}},
+{id:'dep',cat:'ckt',pop:1,name:'مدار DC با منابع وابسته (G و E)',desc:'نت‌لیست R، V، I و منابع کنترل‌شده با ولتاژ',
+ f:[['L','نت‌لیست. R/V/I: «نام a b مقدار». G (جریان=بهره·V_cd از a به b) و E (V_ab = بهره·V_cd): «نام a b c d بهره». گره ۰ = زمین','','R1 1 2 1k\nR2 2 0 2k\nV1 1 0 10\nG1 0 3 2 0 1m\nR3 3 0 4k','ta']],
+ run(v){const U={k:1e3,K:1e3,M:1e6,m:1e-3,u:1e-6,'µ':1e-6,n:1e-9},els=[];
+  String(v.L).split('\n').map(s=>s.trim()).filter(s=>s&&!/^[*#]/.test(s)).forEach((s,i)=>{const p=s.split(/\s+/),t=p[0][0].toUpperCase(),e='خط '+(i+1)+': ',n='GE'.includes(t)?6:4;
+   if(!'RVIGE'.includes(t))throw Error(e+'نام المان باید با R، V، I، G یا E شروع شود');
+   if(p.length!==n)throw Error(e+(n===6?'قالب G/E: «نام a b c d بهره»':'قالب: «نام a b مقدار»'));
+   const m=p[n-1].match(/^(-?\d*\.?\d+(?:[eE][-+]?\d+)?)([kKMmuµn]?)$/);if(!m)throw Error(e+'مقدار نامعتبر است');const val=+m[1]*(U[m[2]]||1);
+   if(t==='R'&&!(val>0))throw Error(e+'مقاومت باید مثبت باشد');const nd=p.slice(1,n-1);if(nd[0]===nd[1])throw Error(e+'دو سر المان یکی است');
+   if(els.some(x=>x.n===p[0]))throw Error(e+'نام تکراری');els.push({n:p[0],t,nd,val})});
+  if(els.length<2)throw Error('حداقل دو المان لازم است');if(!els.some(e=>e.nd.includes('0')))throw Error('گره زمین (۰) در مدار نیست');
+  const nodes=[...new Set(els.flatMap(e=>e.nd))].filter(x=>x!=='0'),ix=Object.fromEntries(nodes.map((x,i)=>[x,i])),id=x=>x==='0'?-1:ix[x],ex=els.filter(e=>'VE'.includes(e.t)),n=nodes.length,sz=n+ex.length;
+  const A=Array.from({length:sz},()=>Array(sz).fill(0)),b=Array(sz).fill(0),add=(r,c,x)=>{if(r>=0&&c>=0)A[r][c]+=x};
+  els.forEach(e=>{const[a,c,cc,d]=e.nd.map(id),g=e.val;
+   if(e.t==='R'){add(a,a,1/g);add(c,c,1/g);add(a,c,-1/g);add(c,a,-1/g)}
+   else if(e.t==='I'){if(a>=0)b[a]-=g;if(c>=0)b[c]+=g}
+   else if(e.t==='G'){add(a,cc,g);add(a,d,-g);add(c,cc,-g);add(c,d,g)}
+   else{const k=n+ex.indexOf(e);add(a,k,1);add(c,k,-1);add(k,a,1);add(k,c,-1);if(e.t==='E'){add(k,cc,-g);add(k,d,g)}else b[k]=g}});
+  const M=A.map((r,i)=>[...r,b[i]]);
+  for(let c=0;c<sz;c++){let p=c;for(let r=c+1;r<sz;r++)if(Math.abs(M[r][c])>Math.abs(M[p][c]))p=r;if(Math.abs(M[p][c])<1e-12)throw Error('دستگاه معادلات ناسازگار است (گره شناور، حلقه منابع ولتاژ یا کنترل نامعتبر).');[M[c],M[p]]=[M[p],M[c]];for(let r=0;r<sz;r++)if(r!==c){const f=M[r][c]/M[c][c];for(let k=c;k<=sz;k++)M[r][k]-=f*M[c][k]}}
+  const x=M.map((r,i)=>r[sz]/r[i]),V=q=>q==='0'?0:x[ix[q]],res=nodes.map(q=>['V(گره '+q+')',N(V(q)),'V']),kcl=Object.fromEntries(nodes.map(q=>[q,0]));
+  els.forEach(e=>{const[a,c,cc,d]=e.nd;let i;if(e.t==='R')i=(V(a)-V(c))/e.val;else if(e.t==='I')i=e.val;else if(e.t==='G')i=e.val*(V(cc)-V(d));else i=x[n+ex.indexOf(e)];
+   if(a!=='0')kcl[a]+=i;if(c!=='0')kcl[c]-=i;res.push([e.n+(e.t==='G'||e.t==='I'?'':''),N(i)+' A',''])});
+  return R('MNA: [G B; C D]·[v; i] = [i_s; e_s] ، G: i = g·(V_c − V_d) ، E: V_a − V_b = μ·(V_c − V_d)','عناصر: '+els.length+' ، گره‌ها: '+n,['جهت جریان هر المان از گره اول به گره دوم است.'],res,['منابع وابسته جریان‌کنترل‌شده (F, H) پشتیبانی نمی‌شوند.'],'KCL: بیشترین مجموع جریان در گره‌ها = '+N(Math.max(0,...Object.values(kcl).map(Math.abs)))+' A (باید ≈ 0 باشد)')}},
+{id:'ctr',cat:'ind',pop:1,name:'انتخاب اولیه کنتاکتور و رله اضافه‌بار',desc:'حداقل جریان موردنیاز هر المان در راه‌اندازی مستقیم یا ستاره‌مثلث',
+ f:[['P','توان خروجی موتور','kW',''],['V','ولتاژ خط','V','400'],['pf','ضریب توان','','0.85'],['e','راندمان','%','90'],['m','روش راه‌اندازی','',[['d','مستقیم'],['y','ستاره‌مثلث']]],['k','نسبت Ist/In','','6']],
+ run(v){req(v.P,'توان',{gt:0});req(v.V,'V',{gt:0});req(v.pf,'ضریب توان',{gt:0,le:1});req(v.e,'راندمان',{gt:0,le:100});req(v.k,'k',{gt:1});
+  const In=v.P*1000/(Math.sqrt(3)*v.V*v.pf*v.e/100),s3=Math.sqrt(3),res=[['جریان نامی خط In',N(In),'A']],st=['In = P/(√3·V·cosφ·η) = '+N(In)+' A'];
+  if(v.m==='d')res.push(['کنتاکتور اصلی: حداقل جریان کاری (AC-3)',N(In),'A'],['تنظیم رله اضافه‌بار',N(In),'A'],['جریان راه‌اندازی',N(v.k*In),'A']);
+  else{res.push(['کنتاکتور اصلی و مثلث: حداقل جریان',N(In/s3),'A'],['کنتاکتور ستاره: حداقل جریان',N(In/3),'A'],['تنظیم رله اضافه‌بار (در مسیر سیم‌پیچ)',N(In/s3),'A'],['جریان خط در مرحله ستاره',N(v.k*In/3),'A']);st.push('کنتاکتور اصلی/مثلث و رله: In/√3 ، کنتاکتور ستاره: In/3')}
+  return R('In = P/(√3·V·cosφ·η) ، مستقیم: Ic ≥ In ، ستاره‌مثلث: Ic ≥ In/√3 (اصلی/مثلث) و In/3 (ستاره)','P='+v.P+' kW ، V='+v.V+' V',st,res,['این مقادیر حداقل جریان لازم‌اند، نه انتخاب قطعی. کنتاکتور، رله و حفاظت اتصال کوتاه را باید از کاتالوگ سازنده و با رده بهره‌برداری (مثلاً AC-3)، نوع هماهنگی و نصب انتخاب کرد و معمولاً بزرگ‌تر از این حداقل‌ها برمی‌دارند.'].concat(v.m==='y'?['ستاره‌مثلث فقط وقتی مجاز است که موتور روی ولتاژ شبکه در حالت کار مثلث بسته شود.']:[]),'')}},
+{id:'pvl',cat:'sol',name:'تلفات و دمای پنل خورشیدی',desc:'دمای سلول، افت دمایی و توان AC تخمینی لحظه‌ای',
+ f:[['P','توان کل آرایه (STC)','kWp',''],['G','تابش','W/m²','800'],['Ta','دمای محیط','°C','35'],['noct','NOCT پنل','°C','45'],['g','ضریب دمایی توان','%/°C','-0.35'],['so','تلفات گردوغبار','%','3'],['wi','تلفات کابل','%','2'],['mi','عدم تطابق','%','2'],['ie','راندمان اینورتر','%','97']],
+ run(v){req(v.P,'توان',{gt:0});req(v.G,'تابش',{gt:0,le:1500});req(v.Ta,'دما',{ge:-60,le:70});req(v.noct,'NOCT',{gt:20,le:70});req(v.g,'ضریب دمایی',{ge:-2,le:0.5});['so','wi','mi'].forEach(k=>req(v[k],k,{ge:0,le:50}));req(v.ie,'راندمان',{gt:50,le:100});
+  const Tc=v.Ta+(v.noct-20)/800*v.G,ft=1+v.g/100*(Tc-25),Pdc=v.P*v.G/1000*ft,Pac=Pdc*(1-v.so/100)*(1-v.wi/100)*(1-v.mi/100)*v.ie/100,Pi=v.P*v.G/1000;
+  return R('Tc = Ta + (NOCT−20)/800·G ، P_dc = P_stc·(G/1000)·[1 + γ(Tc−25)] ، P_ac = P_dc·Π(1−loss_i)·ηinv','G='+v.G+' W/m² ، Ta='+v.Ta+'°C',['Tc = '+N(Tc)+' °C','ضریب دمایی = '+N(ft)],
+   [['دمای سلول',N(Tc),'°C'],['ضریب اثر دما',N(ft),''],['توان DC بعد از دما',N(Pdc),'kW'],['توان AC تخمینی',N(Pac),'kW'],['نسبت عملکرد (لحظه‌ای)',N(Pac/Pi*100),'%'],['کل افت نسبت به تابش ایده‌آل',N((1-Pac/Pi)*100),'%']],
+   ['نتیجه لحظه‌ای است؛ انرژی سالانه نیاز به داده تابش و دمای ساعتی منطقه دارد. NOCT و ضریب دمایی را از دیتاشیت پنل وارد کنید.'],'')}},
+{id:'lap',cat:'mth',pop:1,name:'تبدیل لاپلاس توابع پایه',desc:'F(s)، قطب‌ها، مقدار نهایی و صحت‌سنجی عددی',
+ f:[['t','تابع f(t)','',[['u','پله A·u(t)'],['r','شیب A·t'],['e','A·e^(−at)'],['te','A·t·e^(−at)'],['s','A·sin(ωt)'],['c','A·cos(ωt)'],['es','A·e^(−at)·sin(ωt)'],['ec','A·e^(−at)·cos(ωt)']]],['A','دامنه A','','1'],['a','a','1/s','2'],['w','ω','rad/s','3'],['s0','نقطه آزمون s (حقیقی)','','5']],
+ run(v){req(v.A,'A');req(v.a,'a');req(v.w,'ω',{ge:0});req(v.s0,'s');const{A,a,w}=v,k=v.t,s=v.s0,sc=['e','te','es','ec'].includes(k)?-a:0;
+  if(!(s>sc))throw Error('نقطه آزمون باید در ناحیه همگرایی باشد: s > '+N(sc));
+  const F={u:q=>A/q,r:q=>A/(q*q),e:q=>A/(q+a),te:q=>A/((q+a)*(q+a)),s:q=>A*w/(q*q+w*w),c:q=>A*q/(q*q+w*w),es:q=>A*w/((q+a)*(q+a)+w*w),ec:q=>A*(q+a)/((q+a)*(q+a)+w*w)}[k],
+   f={u:t=>A,r:t=>A*t,e:t=>A*Math.exp(-a*t),te:t=>A*t*Math.exp(-a*t),s:t=>A*Math.sin(w*t),c:t=>A*Math.cos(w*t),es:t=>A*Math.exp(-a*t)*Math.sin(w*t),ec:t=>A*Math.exp(-a*t)*Math.cos(w*t)}[k],
+   S={u:N(A)+'/s',r:N(A)+'/s²',e:N(A)+'/(s + '+N(a)+')',te:N(A)+'/(s + '+N(a)+')²',s:N(A*w)+'/(s² + '+N(w*w)+')',c:N(A)+'·s/(s² + '+N(w*w)+')',es:N(A*w)+'/((s + '+N(a)+')² + '+N(w*w)+')',ec:N(A)+'·(s + '+N(a)+')/((s + '+N(a)+')² + '+N(w*w)+')'}[k],
+   P={u:'0',r:'0 (مضاعف)',e:N(-a),te:N(-a)+' (مضاعف)',s:'±j'+N(w),c:'±j'+N(w),es:N(-a)+' ± j'+N(w),ec:N(-a)+' ± j'+N(w)}[k],T=60/(s-sc),n=200000,h=T/n;
+  let I=f(0)+f(T)*Math.exp(-s*T);for(let i=1;i<n;i++){const t=i*h;I+=(i%2?4:2)*f(t)*Math.exp(-s*t)}I*=h/3;const Fv=F(s),fv=k==='u'?String(A):(['e','te','es','ec'].includes(k)&&a>0?'0':'تعریف‌نشده'),wr=[];
+  if(['e','te','es','ec'].includes(k)&&a<=0)wr.push('a ≤ 0: تابع نمایی روبه رشد/نوسانی است و مقدار نهایی ندارد.');
+  return R('L{f(t)} = ∫₀^∞ f(t)·e^(−st) dt (از جدول تبدیل‌های استاندارد)','A='+N(A)+' ، a='+N(a)+' ، ω='+N(w),['F(s) = '+S,'ناحیه همگرایی: Re(s) > '+N(sc)],
+   [['F(s)',S,''],['قطب‌ها',P,''],['F(s0) از فرمول',N(Fv),''],['انتگرال عددی در s0',N(I),''],['مقدار نهایی f(∞)',fv,'']],wr,'خطای نسبی فرمول نسبت به انتگرال عددی = '+N(Math.abs(Fv-I)/Math.max(Math.abs(Fv),1e-12))+' (باید بسیار کوچک باشد)')}},
+{id:'flt',cat:'pwr',pop:1,name:'اتصال کوتاه نامتقارن (مؤلفه‌های متقارن)',desc:'تک‌فاز به زمین، فاز به فاز، دو‌فاز به زمین و سه‌فاز',
+ f:[['t','نوع خطا','',[['g','تک‌فاز به زمین (a-g)'],['l','فاز به فاز (b-c)'],['d','دو‌فاز به زمین (b-c-g)'],['3','سه‌فاز متقارن']]],['Vl','ولتاژ خط پیش از خطا','V','400'],['X1','X1 (توالی مثبت)','Ω','0.05'],['X2','X2 (توالی منفی)','Ω','0.05'],['X0','X0 (توالی صفر)','Ω','0.1'],['Rf','مقاومت خطا','Ω','0']],
+ run(v){req(v.Vl,'ولتاژ',{gt:0});['X1','X2','X0'].forEach(k=>req(v[k],k,{gt:0}));req(v.Rf,'مقاومت خطا',{ge:0});
+  const ad=(...z)=>z.reduce((p,q)=>[p[0]+q[0],p[1]+q[1]],[0,0]),ml=(x,y)=>[x[0]*y[0]-x[1]*y[1],x[0]*y[1]+x[1]*y[0]],dv=(x,y)=>{const d=y[0]*y[0]+y[1]*y[1];return[(x[0]*y[0]+x[1]*y[1])/d,(x[1]*y[0]-x[0]*y[1])/d]},ng=x=>[-x[0],-x[1]],mg=x=>Math.hypot(x[0],x[1]),an=x=>mg(x)<1e-9?0:Math.atan2(x[1],x[0])/D,F=x=>mg(x)<1e-6?'0':N(mg(x))+' ∠ '+N(an(x))+'°';
+  const E=[v.Vl/Math.sqrt(3),0],Z1=[0,v.X1],Z2=[0,v.X2],Z0=[0,v.X0],Zf=[v.Rf,0],Zg=[3*v.Rf,0],a=[Math.cos(120*D),Math.sin(120*D)],a2=[a[0],-a[1]],Z=[0,0];let I0=Z,I1,I2=Z;
+  if(v.t==='3')I1=dv(E,ad(Z1,Zf));else if(v.t==='g'){I0=I1=I2=dv(E,ad(Z0,Z1,Z2,Zg))}else if(v.t==='l'){I1=dv(E,ad(Z1,Z2,Zf));I2=ng(I1)}
+  else{const z0=ad(Z0,Zg),pr=dv(ml(Z2,z0),ad(Z2,z0));I1=dv(E,ad(Z1,pr));I2=ng(ml(I1,dv(z0,ad(z0,Z2))));I0=ng(ml(I1,dv(Z2,ad(z0,Z2))))}
+  const Ia=ad(I0,I1,I2),Ib=ad(I0,ml(a2,I1),ml(a,I2)),Ic=ad(I0,ml(a,I1),ml(a2,I2)),Ig=[3*I0[0],3*I0[1]];
+  return R('تک‌فاز: I0=I1=I2=E/(Z0+Z1+Z2+3Zf) ، فاز-فاز: I1=−I2=E/(Z1+Z2+Zf) ، دو‌فاز-زمین: Z2‖(Z0+3Zf) ، سه‌فاز: I1=E/(Z1+Zf) ، [Ia Ib Ic] = A·[I0 I1 I2]','E = '+N(E[0])+' V (هر فاز) ، Rf='+v.Rf+' Ω',['I0 = '+F(I0),'I1 = '+F(I1),'I2 = '+F(I2)],
+   [['Iفاز a',F(Ia),'A'],['Iفاز b',F(Ib),'A'],['Iفاز c',F(Ic),'A'],['جریان زمین 3I0',F(Ig),'A'],['I0',F(I0),'A'],['I1',F(I1),'A'],['I2',F(I2),'A']],
+   ['مدل ساده: منبع معادل با راکتانس خالص، ولتاژ پیش از خطا ثابت و بدون بار. X0 وابسته به اتصال سیم‌پیچ ترانس و زمین‌کردن است و باید از داده‌های واقعی شبکه وارد شود. نتیجه برای انتخاب نهایی حفاظت کافی نیست.'],'مجموع جریان فازها باید با 3I0 برابر باشد: اختلاف = '+N(mg(ad(Ia,Ib,Ic,ng(Ig))))+' A')}},
+{id:'ma',cat:'ins',name:'مقیاس‌بندی حلقه ۴ تا ۲۰ mA',desc:'تبدیل مقدار مهندسی ⇄ میلی‌آمپر',
+ f:[['m','جهت','',[['v','مقدار مهندسی ← mA'],['i','mA ← مقدار مهندسی']]],['lo','حداقل بازه','',  '0'],['hi','حداکثر بازه','','100'],['x','ورودی','','']],
+ run(v){req(v.lo,'حداقل');req(v.hi,'حداکثر');req(v.x,'ورودی');if(v.hi<=v.lo)throw Error('حداکثر باید بزرگ‌تر از حداقل باشد');
+  const w=[];let out,u;if(v.m==='v'){out=4+16*(v.x-v.lo)/(v.hi-v.lo);u='mA';if(v.x<v.lo||v.x>v.hi)w.push('ورودی خارج از بازه است.')}
+  else{if(v.x<3.8||v.x>20.5)w.push('جریان خارج از ۴ تا ۲۰ mA؛ احتمال قطع سیم یا خطای ترنسمیتر.');out=v.lo+(v.x-4)*(v.hi-v.lo)/16;u=''}
+  return R('mA = 4 + 16·(x − min)/(max − min)','بازه: '+v.lo+' تا '+v.hi,['نتیجه = '+N(out)+' '+u],[['نتیجه',N(out),u]],w,'')}}
+];
+T.forEach(t=>t.f=t.f.map(a=>Array.isArray(a[3])?[a[0],a[1],a[2],a[3][0][0],a[3]]:a));
+const conn=(id,only3)=>{const t=T.find(x=>x.id===id),o=t.run;t.run=v=>{const r=o(v);if(only3&&v.k!=='3')return r;const y=v.cn==='y',In=+r.res[0][1],Vw=y?v.V/Math.sqrt(3):v.V,Iw=y?In:In/Math.sqrt(3);
+ r.res.splice(1,0,['اتصال سیم‌پیچ',y?'ستاره (Y)':'مثلث (Δ)',''],['ولتاژ هر سیم‌پیچ',N(Vw),'V'],['جریان هر سیم‌پیچ',N(Iw),'A']);
+ r.warn.push('ولتاژ و اتصال را با پلاک موتور تطبیق دهید (مثلاً Δ/Y 400/690: روی شبکه ۴۰۰ ولت مثلث، روی ۶۹۰ ولت ستاره).');
+ if(y&&id==='mst'){r.res=r.res.map(x=>x[0].indexOf('ستاره')===0?[x[0],'غیرقابل اجرا با اتصال ستاره','']:x);r.warn.push('راه‌اندازی ستاره‌مثلث فقط وقتی مجاز است که موتور در حالت کار روی ولتاژ شبکه به‌صورت مثلث بسته شود؛ با اتصال ستاره این روش قابل اجرا نیست و مقدار آن محاسبه نشد.')}
+ if(!y&&id==='mst'){const Id=v.k*In,s3=Math.sqrt(3),i=r.res.findIndex(x=>x[0].indexOf('ستاره')===0);
+  r.res.splice(i+1,0,['مرحله ستاره (شروع): ولتاژ هر سیم‌پیچ',N(v.V/s3),'V'],['مرحله ستاره (شروع): جریان خط = جریان هر سیم‌پیچ',N(Id/3),'A'],['مرحله مثلث (حالت کار): ولتاژ هر سیم‌پیچ',N(v.V),'V'],['مرحله مثلث (حالت کار): جریان هر سیم‌پیچ',N(In/s3),'A'],['مستقیم در مثلث: جریان هر سیم‌پیچ',N(Id/s3),'A']);
+  r.warn.push('جریان لحظه گذار از ستاره به مثلث (پیک گذرا) محاسبه نشده است و به زمان تعویض و سرعت موتور وابسته است.')}
+ return r}};conn('mst');conn('ild',1);
+(()=>{const t=T.find(x=>x.id==='cab'),o=t.run;t.run=v=>{const r=o(v),cu=v.m==='cu',al=cu?0.00393:0.00403,Tm=+v.ins,hx=v.Tx!==null&&!isNaN(v.Tx),hz=v.Iz!==null&&!isNaN(v.Iz),Tc=hx?v.Tx:hz?v.Ta+(Tm-v.Ta)*Math.pow(v.I/v.Iz,2):Tm,f=1+al*(Tc-20),dv0=parseFloat(r.res[0][1]),r20=cu?1/56:1/35;
+ r.res.push(['دمای هادی',N(Tc),'°C'],['مقاومت مخصوص در این دما',N(r20*f),'Ω·mm²/m'],['ضریب افزایش مقاومت نسبت به حالت سرد',N(f),'']);
+ r.subs='ρ(T) = ρ₂₀·[1 + α(T − 20)] ، α = '+al+' ، دمای هادی '+N(Tc)+'°C';
+ r.steps.push('دمای هادی: '+(hx?'مقدار واردشده توسط شما = '+N(Tc)+'°C':hz?'Ta + (Tmax − Ta)·(I/Iz)² = '+N(Tc)+'°C':'برابر حداکثر دمای عایق ('+N(Tm)+'°C) — حالت محافظه‌کارانه'));
+ r.warn=r.warn.filter(w=>w.indexOf('فقط مقاومت')<0);
+ if(!hz&&!hx){const b=dv0*(1+al*(v.Ta-20))/f;r.res.push(['بازهٔ افت: هادی هم‌دمای محیط (حداقل)',N(b)+' V ('+N(b/v.V*100)+'٪)','']
+,['بازهٔ افت: هادی در حد عایق (حداکثر = نتیجهٔ بالا)',N(dv0)+' V ('+N(dv0/v.V*100)+'٪)','']);r.steps.push('بدون Iz و بدون دمای دستی، دمای واقعی هادی بین '+N(v.Ta)+' و '+N(Tm)+'°C است و افت واقعی بین دو مقدار بالا قرار می‌گیرد.')}
+ if(!hz&&!hx)r.warn.push('Iz وارد نشده است؛ دمای هادی برابر حداکثر دمای عایق فرض شد (بدبینانه‌ترین حالت برای افت ولتاژ). برای دمای واقعی‌تر، Iz را از جدول معتبر وارد کنید.');
+ if(hz&&v.I>v.Iz)r.warn.push('جریان بیشتر از Iz است: دمای هادی ('+N(Tc)+'°C) از حد مجاز عایق ('+N(Tm)+'°C) بالاتر می‌رود و سطح مقطع کافی نیست.');
+ r.warn.push('ضریب دمایی مقاومت: مس 0.00393 و آلومینیوم 0.00403 بر درجه (مقادیر متداول). راکتانس، گروه‌بندی کابل‌ها و ضرایب اصلاح روش نصب در محاسبه لحاظ نشده است.');
+ return r}})();
+const STUB=[['ckt','تحلیل مش (حلقه)'],['ckt','منابع وابسته'],['ckt','مدار سه‌فاز نامتعادل'],['ckt','پاسخ گذرا RLC'],['mac','ژنراتور DC و ترمز'],['mac','ماشین سنکرون'],['ind','انتخاب کنتاکتور و رله'],['bld','برآورد بار ساختمان'],['sol','تلفات و دمای پنل'],['sol','اقتصاد نیروگاه خورشیدی'],['pwr','اتصال کوتاه و مؤلفه‌های متقارن'],['ele','یکسوساز و مبدل DC-DC'],['mth','اعداد مختلط و ماتریس'],['mth','تبدیل لاپلاس'],['plc','Modbus و نرخ انتقال'],['prt','انتخاب حفاظت و ارت']].map((s,i)=>({id:'x'+i,cat:s[0],name:s[1],desc:'روش‌ها و مراحل حل در نسخه بعد',dev:1}));
+const ALL=T.concat(STUB.filter(s=>!/نامتعادل|اقتصاد|یکسوساز|اعداد مختلط|مبدل DC-DC|انتخاب حفاظت|Modbus|ماشین سنکرون|برآورد بار|تحلیل مش|منابع وابسته|پاسخ گذرا RLC|ژنراتور DC|انتخاب کنتاکتور|تلفات و دمای پنل|تبدیل لاپلاس|اتصال کوتاه و مؤلف/.test(s.name)));
+// ===== رابط کاربری =====
+const $=s=>document.querySelector(s),app=$('#app'),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const TA=(k,v)=>'<textarea id="f_'+k+'" dir="ltr" rows="7" style="width:100%;border:1px solid var(--ln);border-radius:12px;background:var(--cd);color:var(--tx);padding:10px;font:14px/1.5 monospace">'+esc(v)+'</textarea>';
+const KEY='samr.hist.v1';let st={q:'',cat:''},pre=null;
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return[]}};
+const save=h=>{try{localStorage.setItem(KEY,JSON.stringify(h.slice(0,30)))}catch(e){}};
+try{const th=localStorage.getItem('samr.theme');if(th)document.documentElement.dataset.theme=th}catch(e){}
+$('#th').onclick=()=>{const d=document.documentElement,dark=d.dataset.theme?d.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;d.dataset.theme=dark?'light':'dark';try{localStorage.setItem('samr.theme',d.dataset.theme)}catch(e){}};
+const CCOL={ckt:'#2f6fd6',mac:'#7b4fd6',ind:'#e2682a',bld:'#0f9488',sol:'#d39a06',pwr:'#d83a3a',ele:'#d1347a',mth:'#4a55d8',ins:'#0b94b8',plc:'#35a044',prt:'#5b7186',draw:'#e0950f',tests:'#12a27a'};
+const ICO={
+ckt:'<path d="M10 20h12l3-7 6 14 6-14 3 7h14"/><path d="M10 20v32M54 20v32"/><path d="M10 52h20M34 44v16M40 48v8M40 52h14"/>',
+mac:'<rect x="12" y="20" width="32" height="24" rx="4"/><path d="M44 28h12v8H44M20 20v-4h16v4M20 44v4h16v-4"/><path d="M19 26v12M26 26v12M33 26v12" opacity=".6"/>',
+ind:'<circle cx="32" cy="32" r="9"/><circle cx="32" cy="32" r="18" opacity=".55"/><path d="M32 8v6M32 50v6M8 32h6M50 32h6M15 15l4 4M45 45l4 4M49 15l-4 4M19 45l-4 4"/>',
+bld:'<path d="M14 56V12h24v44M38 28h14v28M8 56h48"/><path d="M21 20h4M27 20h4M21 28h4M27 28h4M21 36h4M27 36h4M43 36h4M43 44h4"/>',
+sol:'<circle cx="19" cy="18" r="7"/><path d="M19 4v4M19 28v4M5 18h4M29 18h4M9 8l3 3M29 8l-3 3M9 28l3-3"/><path d="M16 56l8-20h34l-8 20z"/><path d="M30 36l-3 20M42 36l-2 20M23 46h33"/>',
+pwr:'<path d="M32 6L20 56M32 6l12 50M25 24h14M22 38h20M14 14h36M16 14l16-8 16 8"/><path d="M8 56h48"/>',
+ele:'<rect x="18" y="18" width="28" height="28" rx="3"/><path d="M26 10v8M38 10v8M26 46v8M38 46v8M10 26h8M10 38h8M46 26h8M46 38h8"/><path d="M26 33h4l2-6 4 12 2-6h2"/>',
+mth:'<path d="M10 54V10M10 54h46"/><path d="M12 38c6-26 14-26 20-4s14 22 22-18"/>',
+ins:'<path d="M10 46a22 22 0 0 1 44 0"/><path d="M32 46l12-15"/><circle cx="32" cy="46" r="3"/><path d="M14 38l4 2M22 26l3 3M32 22v4M42 26l-3 3M50 38l-4 2M8 56h48"/>',
+plc:'<rect x="10" y="14" width="44" height="40" rx="4"/><path d="M18 24h10M18 32h10M18 44h28M18 14V8M26 14V8M34 14V8M42 14V8"/><circle cx="40" cy="26" r="2"/><circle cx="48" cy="26" r="2"/><circle cx="40" cy="34" r="2"/><circle cx="48" cy="34" r="2"/>',
+prt:'<path d="M32 6l20 8v16c0 14-9 22-20 28C21 52 12 44 12 30V14z"/><path d="M35 18l-9 16h8l-3 12 11-18h-8z"/>',
+draw:'<path d="M12 52l4-12 28-28 8 8-28 28z"/><path d="M38 18l8 8M12 52l8-2"/>',
+tests:'<rect x="14" y="10" width="36" height="46" rx="4"/><path d="M22 10V6h20v4M22 34l7 7 13-14"/>'};
+const ico=(k,s=40)=>'<svg viewBox="0 0 64 64" width="'+s+'" height="'+s+'" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICO[k]||ICO.ckt)+'</svg>';
+const LOGO=s=>'<svg viewBox="0 0 64 64" width="'+s+'" height="'+s+'" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#f2a71b"/><path d="M37 8L16 37h14l-4 19 22-30H34z" fill="#072431"/></svg>';
+const FL=' fill="currentColor" fill-opacity=".14"',SV=c=>'<svg viewBox="0 0 120 76" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+c+'</svg>',
+ART={
+ckt:SV('<rect x="16" y="20" width="88" height="38"'+FL+' stroke="none"/><path d="M62 58H16V20h26l4-10 8 20 8-20 8 20 4-10h30v38H70"/><path d="M62 50v16M70 54v8"/><circle cx="16" cy="20" r="2.8" fill="currentColor"/><circle cx="104" cy="20" r="2.8" fill="currentColor"/><circle cx="16" cy="58" r="2.8" fill="currentColor"/>'),
+mac:SV('<rect x="26" y="22" width="52" height="34" rx="6"'+FL+'/><path d="M38 22v34M47 22v34M56 22v34M65 22v34"/><rect x="40" y="12" width="22" height="10" rx="2"/><path d="M78 32h12v14H78M90 39h16M30 56v7h16v-7M58 56v7h16v-7"/>'),
+ind:SV('<path d="M14 62V36l14 8V36l14 8V36l14 8V16h18v46z"'+FL+'/><path d="M22 54h6M36 54h6M50 54h6"/><circle cx="65" cy="9" r="3"/><circle cx="76" cy="5" r="4" opacity=".6"/><circle cx="96" cy="52" r="8"/><path d="M96 38v4M96 62v4M82 52h4M106 52h4M86 42l3 3M106 62l-3-3M106 42l-3 3M86 62l3-3"/>'),
+bld:SV('<rect x="34" y="12" width="34" height="52" rx="2"'+FL+'/><path d="M41 22h5M52 22h5M41 32h5M52 32h5M41 42h5M52 42h5M41 52h5M52 52h5" stroke-width="4"/><rect x="72" y="34" width="26" height="30" rx="2"/><path d="M78 43h4M88 43h4M78 53h4M88 53h4" stroke-width="4"/><path d="M51 12V4M14 64h92"/>'),
+sol:SV('<circle cx="26" cy="22" r="8"/><path d="M26 6v4M26 34v4M10 22h4M38 22h4M15 11l3 3M37 11l-3 3M15 33l3-3"/><path d="M44 62l10-26h52l-10 26z"'+FL+'/><path d="M49 49h52M67 36L57 62M80 36L70 62M93 36L83 62M70 62v8M60 70h20"/><path d="M36 28l14 8" stroke-dasharray="3 4"/>'),
+pwr:SV('<path d="M60 6L44 68M60 6l16 62M52 36h16M48 50h24M42 20h36"/><path d="M50 20l10-14 10 14"/><path d="M42 20q-14 10-28 6M78 20q14 10 28 6M44 50q-12 8-30 4M76 50q12 8 30 4M30 68h60"/><path d="M96 8l-6 10h7l-5 10"/>'),
+ele:SV('<rect x="38" y="18" width="44" height="40" rx="4"'+FL+'/><path d="M48 10v8M60 10v8M72 10v8M48 58v8M60 58v8M72 58v8M30 28h8M30 38h8M30 48h8M82 28h8M82 38h8M82 48h8"/><path d="M46 46h7V34h7v12h7V34h7"/>'),
+mth:SV('<path d="M14 64V12M14 64h92"/><path d="M16 40c8-34 22-34 30 0s22 34 30 0 14-16 26-6"/><path d="M84 14h14l-8 9 8 9H84"/>'),
+ins:SV('<path d="M24 58a36 36 0 0 1 72 0z"'+FL+'/><path d="M30 46l4 3M42 34l3 4M60 28v5M78 34l-3 4M90 46l-4 3M60 58l20-22"/><circle cx="60" cy="58" r="4" fill="currentColor"/><rect x="42" y="64" width="36" height="8" rx="2"/>'),
+plc:SV('<rect x="22" y="14" width="76" height="46" rx="5"'+FL+'/><circle cx="34" cy="26" r="3" fill="currentColor"/><circle cx="44" cy="26" r="3"/><circle cx="54" cy="26" r="3" fill="currentColor"/><rect x="64" y="21" width="26" height="14" rx="2"/><path d="M32 46h56M30 60v8M40 60v8M50 60v8M70 60v8M80 60v8M90 60v8M30 14V8M40 14V8M50 14V8"/>'),
+prt:SV('<path d="M60 6l28 10v18c0 16-12 28-28 36C44 62 32 50 32 34V16z"'+FL+'/><path d="M47 36l9 9 17-18"/>'),
+draw:SV('<rect x="14" y="14" width="64" height="48" rx="4"'+FL+'/><path d="M26 38h12l4-8 6 16 6-16 4 8h8"/><path d="M84 66l4-12 22-22 8 8-22 22z"/>'),
+tests:SV('<rect x="30" y="10" width="52" height="58" rx="5"'+FL+'/><path d="M44 10V6h24v4M40 28l6 6 10-12M40 50l6 6 10-12M62 30h12M62 52h12"/>')},
+art=k=>ART[k]||ART.ckt,
+banner=(k,title,sub)=>'<div class="bn" style="--c:'+CCOL[k]+'"><div class="bt"><small>'+esc(sub!==undefined&&sub!==''?sub:(CATS[k]||''))+'</small><h1>'+title+'</h1></div><span class="ba">'+art(k)+'</span></div>';
+try{document.querySelector('#lg0').innerHTML=LOGO(30)}catch(e){}
+const PK='samr.proj.v1',loadP=()=>{try{return JSON.parse(localStorage.getItem(PK))||[]}catch(e){return[]}},saveP=a=>{try{localStorage.setItem(PK,JSON.stringify(a.slice(0,50)))}catch(e){}};
+const projHtml=()=>{const a=loadP();return a.length?a.map((p,i)=>{const t=ALL.find(x=>x.id===p.tid)||{cat:'ckt',name:''};return '<div class="pj"><button class="tc" data-p="'+i+'" style="--c:'+(CCOL[t.cat]||'#64748b')+'"><span class="ti">'+ico(t.cat,24)+'</span><span class="tx"><b>'+esc(p.n)+'</b><small>'+esc(t.name)+'</small></span></button><button class="del" data-d="'+i+'" aria-label="حذف">×</button></div>'}).join(''):'<div class="card">هنوز پروژه‌ای ذخیره نشده است.</div>'};
+const card=t=>'<button class="tc" data-id="'+t.id+'" style="--c:'+CCOL[t.cat]+'"><span class="ti">'+ico(t.cat,22)+'</span><span class="tx"><b>'+esc(t.name)+'</b><small>'+esc(t.desc)+'</small></span>'+(t.dev?'<span class="badge">در حال توسعه</span>':'')+'</button>';
+function home(){
+ const h=load(),pj=loadP(),cnt=k=>T.filter(t=>t.cat===k).length,fa=n=>n.toLocaleString('fa-IR'),
+  qa=(href,k,t1,t2)=>'<a class="qc" href="'+href+'" style="--c:'+CCOL[k]+'"><span class="ti">'+ico(k,24)+'</span><span><b>'+t1+'</b><small>'+t2+'</small></span></a>',
+  pcb='<svg class="pcb" viewBox="0 0 400 200" preserveAspectRatio="xMaxYMid slice" aria-hidden="true"><g fill="none" stroke="#f2a71b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M0 40h90l24 24h70"/><path d="M400 30h-70l-24 24h-60"/><path d="M0 150h60l24-24h96"/><path d="M400 160h-110l-30-30h-40"/><path d="M200 0v40M200 200v-34"/></g><g fill="#3ddbb0"><circle cx="184" cy="64" r="3.4"/><circle cx="180" cy="126" r="3.4"/><circle cx="200" cy="40" r="3.4"/><circle cx="200" cy="166" r="3.4"/><circle cx="220" cy="130" r="3.4"/><circle cx="246" cy="54" r="3.4"/></g></svg>';
+ app.innerHTML='<div class="hero">'+pcb+'<div class="hc"><h1>محاسبات مهندسی برق، با مراحل حل و کنترل صحت</h1><p>فرمول، جای‌گذاری و هشدارها کنار هر نتیجه</p><div class="sb"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" type="search" placeholder="جست‌وجوی ابزار: موتور، کابل، خازن…" value="'+esc(st.q)+'"></div><div class="chips"><span>'+fa(T.length)+' ابزار فعال</span><span>'+fa(Object.keys(CATS).length)+' دسته</span><span>رسم مدار</span><span>تحلیل عکس</span></div></div></div>'+
+ '<div id="focus"></div><h2>دسته‌بندی‌ها</h2><div class="tiles">'+Object.entries(CATS).map(([k,n])=>'<button class="tile'+(st.cat===k?' on':'')+'" data-c="'+k+'" style="--c:'+CCOL[k]+'"><span class="im">'+art(k)+'</span><span class="tl"><b>'+n+'</b><small>'+fa(cnt(k))+' ابزار</small></span></button>').join('')+'</div><div id="pop"></div>'+
+ (pj.length?'<h2>پروژه‌های ذخیره‌شده</h2>'+projHtml():'')+(h.length?'<h2>محاسبات اخیر</h2><div id="rec">'+h.map((e,i)=>{const t=ALL.find(x=>x.id===e.id)||{cat:'ckt'};return '<button class="tc" data-h="'+i+'" style="--c:'+CCOL[t.cat]+'"><span class="ti">'+ico(t.cat,22)+'</span><span class="tx"><b>'+esc(e.n)+'</b><small>'+esc(e.s)+'</small></span></button>'}).join('')+'</div>':'');
+ const list=()=>{const q=st.q.trim(),f=$('#focus');$('#pop').innerHTML=(!q&&!st.cat)?'<h2>پرکاربردها</h2>'+T.filter(t=>t.pop).slice(0,6).map(card).join(''):'';
+  if(q){const L=ALL.filter(t=>(t.name+t.desc+CATS[t.cat]).includes(q));f.innerHTML='<h2>نتایج ('+fa(L.length)+')</h2>'+(L.length?L.map(card).join(''):'<div class="card">موردی پیدا نشد؛ نام ابزار یا کمیت دیگری را امتحان کنید.</div>')}
+  else if(st.cat){const L=ALL.filter(t=>t.cat===st.cat);f.innerHTML=banner(st.cat,esc(CATS[st.cat]),fa(L.length)+' ابزار')+L.map(card).join('')+'<div class="row"><button id="allc">بازگشت به پرکاربردها</button></div>'}
+  else f.innerHTML='<div class="qa">'+qa('#/draw','draw','رسم مدار و تحلیل عکس','بوم رسم، نت‌لیست و حل')+qa('#/tests','tests','آزمون‌های مرجع','بررسی خودکار فرمول‌ها')+'</div>'};
+ list();$('#q').oninput=e=>{st.q=e.target.value;list()};
+ app.onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.id==='allc'){st.cat='';home()}
+  else if(b.dataset.c!==undefined){st.cat=st.cat===b.dataset.c?'':b.dataset.c;st.q='';home();try{scrollTo({top:0,behavior:'smooth'})}catch(x){}}
+  else if(b.dataset.id)location.hash='#/t/'+b.dataset.id;
+  else if(b.dataset.p!==undefined){const p=loadP()[+b.dataset.p];pre=p.v;location.hash='#/t/'+p.tid}else if(b.dataset.d!==undefined){const a=loadP();a.splice(+b.dataset.d,1);saveP(a);home()}else if(b.dataset.h!==undefined){const e2=h[+b.dataset.h];pre=e2.v;location.hash='#/t/'+e2.id}}}
+
+function tool(id){
+ const t=ALL.find(x=>x.id===id);if(!t){location.hash='#/';return}
+ let h=`<div class="tp" style="--ac:${CCOL[t.cat]}"><a class="back" href="#/">→ بازگشت</a>${banner(t.cat,esc(t.name))}`;
+ if(t.dev){app.innerHTML=h+'</div><div class="card w">این ابزار هنوز پیاده‌سازی نشده است و نتیجه‌ای تولید نمی‌کند.</div>';return}
+ h+='<div class="card"><div class="fg">'+t.f.map(([k,l,u,d,o])=>{const val=pre&&k in pre?(pre[k]===null?'':pre[k]):d;
+  return '<div class="fld'+((o==='ta'||Array.isArray(o)||l.length>26)?' w2':'')+'">'+`<label>${l}${u?' <bdi class="un">'+u+'</bdi>':''}</label>`+(o==='ta'?TA(k,val):Array.isArray(o)?`<select id="f_${k}">${o.map(([a,b])=>`<option value="${a}" ${a===val?'selected':''}>${b}</option>`).join('')}</select>`:`<input id="f_${k}" dir="ltr" ${o==='t'?'':'inputmode="decimal"'} value="${esc(val)}">`)+'</div>'}).join('')+'</div></div>'+
+ '<div class="row"><button class="p" id="go">محاسبه</button><button id="clr">پاک کردن</button></div><div class="row"><input id="pn" placeholder="نام پروژه برای ذخیره" style="flex:2"><button id="sv">ذخیره پروژه</button></div><div id="out"></div>';
+ pre=null;app.innerHTML=h+'</div>';
+ const get=()=>{const v={};t.f.forEach(([k,,,,o])=>{const x=$('#f_'+k).value.trim();v[k]=(Array.isArray(o)||o==='t'||o==='ta')?x:(x===''?null:Number(x.replace(/[٠-٩]/g,c=>c.charCodeAt(0)-1632).replace('٫','.').replace(',','.')))});return v};
+ $('#clr').onclick=()=>{t.f.forEach(([k,,,d,o])=>{if(!Array.isArray(o)&&o!=='t')$('#f_'+k).value='';});$('#out').innerHTML=''};
+ $('#sv').onclick=()=>{const n=($('#pn').value||'').trim()||t.name+' '+new Date().toISOString().slice(0,10),a=loadP();a.unshift({n,tid:t.id,v:get(),tm:Date.now()});saveP(a);$('#sv').textContent='ذخیره شد'};
+ $('#go').onclick=()=>{const v=get(),out=$('#out');
+  try{const r=t.run(v);
+   const rep=t.name+'\n'+r.res.map(x=>x[0]+': '+x[1]+' '+x[2]).join('\n')+'\nفرمول: '+r.formula+'\nمراحل:\n'+r.steps.join('\n')+(r.warn.length?'\nهشدار: '+r.warn.join(' | '):'')+'\n(نسخه اولیه؛ فاقد تأیید رسمی تست)';
+   out.innerHTML=`<div class="card res">${r.res.map(x=>`<div><b>${x[0]}</b><span>${x[1]} ${x[2]}</span></div>`).join('')}</div>
+   <div class="card"><b>فرمول</b><code>${esc(r.formula)}</code><b>داده‌ها</b><code>${esc(r.subs)}</code><b>مراحل حل</b>${r.steps.map(s=>'<code>'+esc(s)+'</code>').join('')}</div>
+   ${r.warn.length?'<div class="card w">'+r.warn.map(esc).join('<br>')+'</div>':''}${r.check?'<div class="card ok"><b>کنترل صحت:</b> '+esc(r.check)+'</div>':''}
+   <div class="row"><button id="cp">کپی گزارش</button><button id="pr">چاپ / PDF</button></div>`;
+   $('#pr').onclick=()=>{try{print()}catch(e){}};
+   $('#cp').onclick=()=>{try{navigator.clipboard.writeText(rep).catch(()=>fb())}catch(e){fb()}function fb(){const a=document.createElement('textarea');a.value=rep;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove()}$('#cp').textContent='کپی شد'};
+   const hs=load();hs.unshift({id:t.id,n:t.name,s:r.res.slice(0,2).map(x=>x[0]+' '+x[1]+' '+x[2]).join(' ، '),v});save(hs);
+  }catch(e){out.innerHTML='<div class="card er">'+esc(e.message)+'</div>'}}}
+function draw(){
+ const G=20,W=360,H=300,SK='samr.draw.v1',css=n=>{try{return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888'}catch(e){return'#888'}};
+ let tool='R',els=[],gnd=[],s1=null,sel=null,vol={},sm=null,pts={};
+ const sv=()=>{try{return JSON.parse(localStorage.getItem(SK))||[]}catch(e){return[]}};
+ const PR='You are reading a photo or drawing of a DC electrical circuit (resistors, independent voltage sources, independent current sources only). Reply with ONLY one JSON object, no markdown, with keys: elements (array of objects with keys name, type, n1, n2, value, confidence, note) and warnings (array of strings). type is R, V or I. Node 0 is ground: use the ground symbol, or the negative terminal of the main source if none is drawn; number all other nodes 1, 2, 3 so that wires that are electrically connected share one node. For V, n1 is the positive terminal. For I, the arrow points from n1 to n2. value uses SI suffixes k, M, m, u, n (example 4.7k). confidence is 0 to 1. If a value is unreadable, set value to empty and confidence below 0.5. Never invent components. Put unsupported parts (capacitors, inductors, diodes, transistors, AC sources, op-amps) in warnings. Write note and warnings in Persian.';
+ const TL=[['R','مقاومت','<path d="M2 12h4l2-5 4 10 4-10 2 5h4"/>'],['V','منبع ولتاژ','<path d="M3 12h6M9 6v12M14 9v6M14 12h7"/>'],['I','منبع جریان','<circle cx="12" cy="12" r="6"/><path d="M8.5 12h7M13 9.5l2.5 2.5-2.5 2.5M2 12h4M18 12h4"/>'],['W','سیم','<path d="M3 17L21 7"/><circle cx="3" cy="17" r="1.6"/><circle cx="21" cy="7" r="1.6"/>'],['G','زمین','<path d="M12 3v8M5 11h14M8 15h8M10.5 19h3"/>'],['E','ویرایش','<path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/>'],['M','جابه‌جایی','<path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/>'],['X','حذف','<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13M10 11v6M14 11v6"/>']];
+ app.innerHTML=`<a class="back" href="#/">→ بازگشت</a>${banner('draw','رسم مدار و تحلیل عکس','بوم رسم، نت‌لیست، حل مدار و تحلیل عکس')}
+ <div class="card"><div class="stp"><i>۱</i>رسم مدار DC</div><div class="tbar" id="tb">${TL.map(([k,n,s])=>`<button data-k="${k}" class="${k==='R'?'on':''}"><svg viewBox="0 0 24 24" aria-hidden="true">${s}</svg><span>${n}</span></button>`).join('')}</div>
+ <label>مقدار (مثلاً 4.7k ، 12 ، 10m)</label><input id="dv" dir="ltr" value="1k">
+ <canvas id="cv" width="${W}" height="${H}" style="touch-action:none;width:100%;height:auto;aspect-ratio:6/5;display:block;border:1px solid var(--ln);border-radius:14px;background:var(--cd);margin-top:4px"></canvas>
+ <details class="hp"><summary>راهنمای رسم</summary><p>ابزار را از نوار بالا انتخاب کنید؛ برای مقاومت، منبع و سیم، دو نقطهٔ شبکه را به‌ترتیب لمس کنید. منبع ولتاژ: نقطهٔ اول قطب مثبت است. منبع جریان: جهت از نقطهٔ اول به دوم. یک نماد زمین هم حتماً بگذارید.</p></details>
+ <div class="row"><button class="p" id="sv2">حل مدار</button><button id="nl">ساخت نت‌لیست</button></div><div class="row" style="margin-top:0"><button id="un">برگردان</button><button id="cl">پاک کردن</button></div>
+ <label>نت‌لیست ساخته‌شده</label><textarea id="ta" dir="ltr" rows="4" style="width:100%;border:1px solid var(--ln);border-radius:12px;background:var(--cd);color:var(--tx);padding:10px;font:14px/1.5 monospace"></textarea>
+ <div class="row"><button id="op">بازکردن در «حل مدار DC»</button></div><div id="ro"></div>
+ <details class="hp"><summary>ذخیره و بازکردن نقشه‌ها</summary><label>نام برای ذخیرهٔ نقشه</label><input id="nm"><div class="row"><button id="sd">ذخیره</button></div><select id="sl"></select><div class="row"><button id="ld">بازکردن</button><button id="dl" style="color:var(--er);border-color:var(--er)">حذف</button></div></details></div>
+ <div class="card"><div class="stp"><i>۲</i>تحلیل عکس مدار با هوش مصنوعی</div><div id="imgnote" class="w" style="margin:6px 0">در حال بررسی دسترسی…</div>
+ <div id="imgbox" style="display:none"><input type="file" id="fi" accept="image/*"><div class="row"><button class="p" id="an">تحلیل عکس</button></div><div id="ao"></div></div></div>`;
+ const cv=$('#cv'),c=cv.getContext('2d'),K=p=>p[0]+','+p[1];
+ const sym=e=>{const ax=e.a[0]*G,ay=e.a[1]*G,bx=e.b[0]*G,by=e.b[1]*G,L=Math.hypot(bx-ax,by-ay),m=L/2;c.save();c.translate(ax,ay);c.rotate(Math.atan2(by-ay,bx-ax));c.beginPath();c.moveTo(0,0);
+  if(e.t==='R'){const s=Math.min(m,20);c.lineTo(m-s,0);for(let i=0;i<6;i++)c.lineTo(m-s+s*2*(i+.5)/6,i%2?6:-6);c.lineTo(m+s,0);c.lineTo(L,0)}
+  else if(e.t==='V'){c.lineTo(m-4,0);c.moveTo(m-4,-9);c.lineTo(m-4,9);c.moveTo(m+4,-5);c.lineTo(m+4,5);c.moveTo(m+4,0);c.lineTo(L,0)}
+  else if(e.t==='I'){c.lineTo(m-9,0);c.moveTo(m+9,0);c.lineTo(L,0)}else c.lineTo(L,0);
+  c.stroke();if(e.t==='I'){c.beginPath();c.arc(m,0,9,0,7);c.moveTo(m-5,0);c.lineTo(m+5,0);c.lineTo(m+1,-3);c.moveTo(m+5,0);c.lineTo(m+1,3);c.stroke()}c.restore();
+  if(e.t!=='W'){const nx=(by-ay)/L,ny=-(bx-ax)/L;c.textAlign=nx>.5?'left':nx<-.5?'right':'center';c.fillText(e.v+(e.t==='R'?'Ω':e.t==='V'?'V':'A'),(ax+bx)/2+nx*14,(ay+by)/2+ny*14+(Math.abs(ny)>.5?0:4));c.textAlign='center'}if(e.t==='V')c.fillText('+',ax+(bx-ax)*.3,ay+(by-ay)*.3-8)};
+ const redraw=()=>{c.clearRect(0,0,W,H);c.fillStyle=css('--ln');for(let i=0;i<=W/G;i++)for(let j=0;j<=H/G;j++)c.fillRect(i*G-1,j*G-1,2,2);
+  c.strokeStyle=css('--tx');c.fillStyle=css('--tx');c.lineWidth=2;c.font='11px sans-serif';c.textAlign='center';c.direction='ltr';els.forEach((e,i)=>{c.strokeStyle=c.fillStyle=i===sel?css('--ac'):css('--tx');sym(e)});c.strokeStyle=c.fillStyle=css('--tx');
+  gnd.forEach(g=>{const x=g[0]*G,y=g[1]*G;c.beginPath();c.moveTo(x,y);c.lineTo(x,y+8);[[10,8],[6,12],[2,16]].forEach(([w,d])=>{c.moveTo(x-w,y+d);c.lineTo(x+w,y+d)});c.stroke()});
+  if(s1){c.fillStyle=css('--ac');c.beginPath();c.arc(s1[0]*G,s1[1]*G,5,0,7);c.fill()}c.fillStyle=css('--ok');Object.entries(vol).forEach(([n,v])=>{const p=pts[n];if(p)c.fillText(v+' V',p[0]*G,p[1]*G-8)})};
+ const build=()=>{const par={},f=x=>(par[x]===undefined?(par[x]=x):par[x]===x?x:(par[x]=f(par[x]))),u=(a,b)=>{par[f(a)]=f(b)};
+  if(!gnd.length)throw Error('حداقل یک نماد زمین بگذارید (نقطهٔ ۰ ولت).');
+  els.forEach(e=>{f(K(e.a));f(K(e.b));if(e.t==='W')u(K(e.a),K(e.b))});gnd.forEach((g,i)=>{f(K(g));if(i)u(K(gnd[0]),K(g))});
+  const g0=f(K(gnd[0])),id={},cnt={R:0,V:0,I:0};let n=0;pts={};const nid=p=>{const r=f(K(p));if(r===g0)return'0';if(!id[r]){id[r]=String(++n);pts[id[r]]=p}return id[r]};
+  const L=els.filter(e=>e.t!=='W').map(e=>e.t+(++cnt[e.t])+' '+nid(e.a)+' '+nid(e.b)+' '+e.v);if(L.length<2)throw Error('حداقل دو المان (R/V/I) بگذارید.');return L.join('\n')};
+ const err=(o,m)=>{o.innerHTML='<div class="card er">'+esc(m)+'</div>'};
+ const solve=(text,out,an)=>{try{const r=T.find(t=>t.id==='dc').run({m:'n',L:text});if(an){vol={};r.res.forEach(x=>{const m=x[0].match(/^V\(گره (\S+)\)$/);if(m)vol[m[1]]=x[1]})}
+  out.innerHTML='<div class="card res">'+r.res.map(x=>'<div><b>'+esc(x[0])+'</b><span>'+esc(x[1])+' '+esc(x[2])+'</span></div>').join('')+'</div><div class="card ok"><b>کنترل صحت:</b> '+esc(r.check)+'</div>';if(an)redraw()}catch(e){err(out,e.message)}};
+ $('#tb').onclick=e=>{const b=e.target.closest('button');if(!b)return;tool=b.dataset.k;document.querySelectorAll('#tb button').forEach(x=>x.classList.toggle('on',x===b));s1=null;sel=null;const d={R:'1k',V:'12',I:'10m'}[tool];if(d)$('#dv').value=d;redraw()};
+ cv.onpointerdown=ev=>{if(ev.preventDefault)ev.preventDefault();const r=cv.getBoundingClientRect(),x=Math.round((ev.clientX-r.left)*W/r.width/G),y=Math.round((ev.clientY-r.top)*H/r.height/G);
+  if(tool==='G'){const i=gnd.findIndex(g=>g[0]===x&&g[1]===y);i<0?gnd.push([x,y]):gnd.splice(i,1)}
+  else if(tool==='E'||tool==='M'){const near=()=>{let b=-1,bd=24;els.forEach((e,i)=>{const d=Math.hypot((e.a[0]+e.b[0])*G/2-x*G,(e.a[1]+e.b[1])*G/2-y*G);if(d<bd){bd=d;b=i}});return b};
+   if(tool==='E'){const b=near();if(b>=0)els[b].v=$('#dv').value.trim()||els[b].v}
+   else if(sel===null){const b=near();if(b>=0)sel=b}else{const e=els[sel],dx=x-e.a[0],dy=y-e.a[1];e.a=[e.a[0]+dx,e.a[1]+dy];e.b=[e.b[0]+dx,e.b[1]+dy];sel=null}}
+  else if(tool==='X'){let b=-1,bd=24;els.forEach((e,i)=>{const d=Math.hypot((e.a[0]+e.b[0])*G/2-x*G,(e.a[1]+e.b[1])*G/2-y*G);if(d<bd){bd=d;b=i}});if(b>=0)els.splice(b,1);else{const i=gnd.findIndex(g=>Math.hypot(g[0]-x,g[1]-y)<1.5);if(i>=0)gnd.splice(i,1)}}
+  else if(!s1)s1=[x,y];else{if(s1[0]!==x||s1[1]!==y)els.push({t:tool,a:s1,b:[x,y],v:$('#dv').value.trim()||'1'});s1=null}vol={};redraw()};
+ $('#nl').onclick=()=>{try{$('#ta').value=build();$('#ro').innerHTML=''}catch(e){err($('#ro'),e.message)}};
+ $('#sv2').onclick=()=>{try{const t=build();$('#ta').value=t;solve(t,$('#ro'),true)}catch(e){err($('#ro'),e.message)}};
+ $('#un').onclick=()=>{els.pop();vol={};sel=null;redraw()};
+ $('#cl').onclick=()=>{els=[];gnd=[];s1=null;vol={};$('#ta').value='';$('#ro').innerHTML='';redraw()};
+ $('#op').onclick=()=>{pre={m:'n',L:$('#ta').value};location.hash='#/t/dc'};
+ const lst=()=>{$('#sl').innerHTML=sv().map((d,i)=>'<option value="'+i+'">'+esc(d.n)+'</option>').join('')||'<option value="">(خالی)</option>'},put=a=>{try{localStorage.setItem(SK,JSON.stringify(a.slice(0,30)))}catch(e){}lst()};
+ $('#sd').onclick=()=>{const a=sv();a.unshift({n:($('#nm').value||'').trim()||'مدار '+new Date().toISOString().slice(0,10),els,gnd});put(a)};
+ $('#ld').onclick=()=>{const d=sv()[+$('#sl').value];if(d){els=d.els;gnd=d.gnd;vol={};s1=null;redraw()}};
+ $('#dl').onclick=()=>{const a=sv(),i=+$('#sl').value;if(a[i]){a.splice(i,1);put(a)}};
+ const graph=(cv2,text)=>{const g=cv2.getContext('2d'),L=text.split('\n').map(s=>s.trim().split(/\s+/)).filter(p=>p.length>=4&&/^[RVIrvi]/.test(p[0])),ns=[...new Set(L.flatMap(p=>[p[1],p[2]]))].sort((a,b)=>a==='0'?-1:b==='0'?1:a-b),cx=cv2.width/2,cy=cv2.height/2,r=Math.min(cx,cy)-34,pos={},cn={};
+  g.clearRect(0,0,cv2.width,cv2.height);ns.forEach((n,i)=>{const a=2*Math.PI*i/ns.length-Math.PI/2;pos[n]=[cx+r*Math.cos(a),cy+r*Math.sin(a)]});g.strokeStyle=css('--ac');g.lineWidth=2;g.font='12px sans-serif';g.textAlign='center';
+  L.forEach(p=>{const k=[p[1],p[2]].sort().join('|'),i=cn[k]=(cn[k]||0)+1,a=pos[p[1]],b=pos[p[2]],dx=b[1]-a[1],dy=a[0]-b[0],d=Math.hypot(dx,dy)||1,o=8+(i-1)*14;g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();g.fillStyle=css('--tx');g.fillText(p[0]+' '+p[3],(a[0]+b[0])/2+dx/d*o,(a[1]+b[1])/2+dy/d*o)});
+  ns.forEach(n=>{const[x,y]=pos[n];g.beginPath();g.arc(x,y,11,0,7);g.fillStyle=css('--cd');g.fill();g.stroke();g.fillStyle=css('--tx');g.fillText(n==='0'?'GND':n,x,y+4)})};
+ lst();redraw();
+ if(window.claude&&claude.use)claude.use('sample').then(async s=>{if(!s){$('#imgnote').textContent='تحلیل عکس فقط در صفحهٔ منتشرشده داخل Claude فعال است.';return}
+  let ok=false;try{const l=await(s.limits?s.limits():null);ok=!!(l&&l.images)}catch(e){}if(!ok){$('#imgnote').textContent='ارسال تصویر در این نمایش فعال نیست.';return}sm=s;$('#imgnote').textContent='عکس مدار را بارگذاری کنید. نتیجه قطعی نیست: قبل از حل، نت‌لیست و نمای گرافی را با عکس مقایسه و اصلاح کنید. (از سهمیهٔ Claude شما مصرف می‌شود.)';$('#imgbox').style.display='block';
+  $('#an').onclick=async()=>{const f=$('#fi').files[0],ao=$('#ao');if(!f){err(ao,'ابتدا یک عکس انتخاب کنید');return}ao.innerHTML='<div class="card">در حال تحلیل…</div>';
+   try{const bm=await createImageBitmap(f),k=Math.min(1,1600/Math.max(bm.width,bm.height)),cc=document.createElement('canvas');cc.width=Math.round(bm.width*k);cc.height=Math.round(bm.height*k);cc.getContext('2d').drawImage(bm,0,0,cc.width,cc.height);
+    const blob=await new Promise(r=>cc.toBlob(r,'image/jpeg',0.85)),{text}=await sm(PR,{images:[blob],cache:false});let j;try{j=JSON.parse(text.replace(/^[^{]*/,'').replace(/[^}]*$/,''))}catch(e){err(ao,'پاسخ قابل خواندن نبود؛ دوباره امتحان کنید یا عکس واضح‌تری بگیرید.');return}
+    const cnt={R:0,V:0,I:0},E=(j.elements||[]).filter(e=>e&&'RVI'.includes(String(e.type||'x').toUpperCase()[0])).map(e=>{const t=String(e.type).toUpperCase()[0];return{nm:t+(++cnt[t]),n1:String(e.n1),n2:String(e.n2),v:String(e.value||'').trim(),cf:+e.confidence||0,note:e.note||''}});
+    if(!E.length){err(ao,'هیچ المان معتبری (R/V/I) تشخیص داده نشد.');return}
+    ao.innerHTML='<div class="card w">تشخیص قطعی نیست. همهٔ موارد را با عکس مقایسه کنید. در مقدارهای «؟» مقدار را خودتان بنویسید.</div><div class="card">'+E.map(e=>'<div class="'+(e.cf<0.7||!e.v?'w':'')+'">'+esc(e.nm)+' ('+esc(e.n1)+'→'+esc(e.n2)+') = '+esc(e.v||'؟')+' — اطمینان '+Math.round(e.cf*100)+'٪ '+esc(e.note)+'</div>').join('')+'</div>'+(Array.isArray(j.warnings)&&j.warnings.length?'<div class="card w">'+j.warnings.map(esc).join('<br>')+'</div>':'')+
+     '<label>نت‌لیست قابل ویرایش</label><textarea id="ia" dir="ltr" rows="6" style="width:100%;border:1px solid var(--ln);border-radius:12px;background:var(--cd);color:var(--tx);padding:10px;font:14px/1.5 monospace">'+esc(E.map(e=>e.nm+' '+e.n1+' '+e.n2+' '+(e.v||'?')).join('\n'))+'</textarea><canvas id="gc" width="320" height="260" style="max-width:100%;margin-top:8px"></canvas><div><small style="color:var(--mu)">نمای گرافی: گره‌ها و المان‌های بین آن‌ها؛ نقشهٔ استاندارد مدار نیست.</small></div>'+
+     '<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="ck" style="width:24px;min-height:24px"> من نت‌لیست را با عکس مقایسه کرده‌ام و تأیید می‌کنم</label><div class="row"><button class="p" id="sv3" disabled>تأیید و حل</button></div><div id="ar"></div>';
+    graph($('#gc'),$('#ia').value);$('#ia').oninput=()=>graph($('#gc'),$('#ia').value);$('#ck').onchange=()=>{$('#sv3').disabled=!$('#ck').checked};$('#sv3').onclick=()=>solve($('#ia').value,$('#ar'),false)
+   }catch(e){err(ao,e.code==='not_granted'?'اجازهٔ استفاده از Claude داده نشد.':e.code==='rate_limited'?'تعداد درخواست‌ها زیاد است؛ کمی بعد دوباره امتحان کنید.':(e.message||'تحلیل عکس انجام نشد.'))}}}).catch(()=>{$('#imgnote').textContent='تحلیل عکس در دسترس نیست.'})
+}
+function tests(){
+ const S3=Math.sqrt(3),R2=220*330/550,C=[
+  ['ohm',{V:12,R:100},1,()=>0.12,1e-9,'قانون اهم: I = V/R'],['sp',{},0,()=>790,1e-9,'مقاومت سری ۱۰۰+۲۲۰+۴۷۰'],
+  ['p3',{I:50},0,()=>S3*400*50/1000,1e-6,'توان ظاهری سه‌فاز √3·V·I'],['pfc',{P:100},0,()=>100*(Math.tan(Math.acos(.75))-Math.tan(Math.acos(.95))),1e-6,'خازن اصلاح ضریب توان'],
+  ['cab',{I:32,L:50,S:6},0,()=>S3/56*(1+.00393*50)*50*32*.9/6,1e-5,'افت ولتاژ کابل مس'],['dc',{},1,()=>12*R2/(100+R2),1e-5,'حل DC: تقسیم ولتاژ گره ۲'],
+  ['thv',{},0,()=>12*R2/(100+R2),1e-5,'تونن: Vth'],['thv',{},1,()=>1/(1/100+1/220+1/330),1e-5,'تونن: Rth'],
+  ['rlc',{},0,()=>Math.hypot(10,2*Math.PI*50*.05-1/(2*Math.PI*50*1e-4)),1e-5,'امپدانس RLC سری'],['trn',{},2,()=>12*(1-Math.exp(-1)),1e-5,'پاسخ پله RC در t=τ'],
+  ['mesh',{},0,()=>12/(100+R2),1e-5,'تحلیل مش: جریان مش ۱'],['lin',{},0,()=>2,1e-9,'دستگاه خطی: x1'],['dcd',{},0,()=>50,1e-9,'باک ۲۴→۱۲: دیوتی'],
+  ['isc',{},1,()=>630e3/(S3*400)*100/4/1000,1e-5,'اتصال کوتاه پشت ترانس'],['dcg',{t:'h'},1,()=>52,1e-9,'ژنراتور شنت: جریان آرمیچر'],
+  ['flt',{t:'g'},0,()=>3*(400/S3)/.2,1e-4,'اتصال کوتاه تک‌فاز به زمین'],['lap',{},2,'3',1e-5,'لاپلاس: F(s0) برابر انتگرال عددی'],
+  ['syn',{I:50,Xs:3,Ra:.2},0,()=>Math.hypot(400/S3+.2*40+3*30,3*40-.2*30),1e-5,'نیروی محرکه ژنراتور سنکرون'],['bat',{P:500,h:5},1,()=>500*5/(.8*.9)/48,1e-6,'ظرفیت باتری'],['mbs',{},1,()=>(40*11/9600+.005)*1000,1e-6,'زمان تراکنش Modbus']];
+ const base=(t,ov)=>{const v={};t.f.forEach(([k,l,u,d,o])=>{v[k]=Array.isArray(o)?d:(o==='t'||o==='ta')?String(d):d===''?null:Number(d)});return Object.assign(v,ov)};let ok=0;
+ const rows=C.map(([id,ov,ri,ef,tol,lb])=>{try{const t=T.find(x=>x.id===id),r=t.run(base(t,ov)),got=parseFloat(r.res[ri][1]),exp=typeof ef==='function'?ef():parseFloat(r.res[+ef][1]),pass=Math.abs(got-exp)<=tol*Math.max(Math.abs(exp),1e-12);if(pass)ok++;return{lb,got,exp,pass}}catch(e){return{lb,err:e.message}}});
+ app.innerHTML='<a class="back" href="#/">→ بازگشت</a>'+banner('tests','آزمون‌های مرجع','بررسی خودکار فرمول‌ها')+'<div class="card '+(ok===C.length?'ok':'er')+'"><b>قبول: '+ok+' از '+C.length+'</b></div><div class="card">'+rows.map(r=>'<div class="'+(r.pass?'ok':'er')+'">'+(r.pass?'✓ ':'✗ ')+esc(r.lb)+(r.err?' — خطا: '+esc(r.err):'<br><small>محاسبه: '+N(r.got)+' ، مرجع: '+N(r.exp)+'</small>')+'</div>').join('<hr style="border:0;border-top:1px dashed var(--ln)">')+'</div><div class="card w">مقدار مرجع هر ردیف با فرمول مستقل (دستی) محاسبه شده است. این آزمون نشان می‌دهد کد با فرمول هم‌خوانی دارد؛ تأیید رسمی یا مطابقت با استاندارد نیست.</div>'}
+const route=()=>{const h=location.hash;if(['#/profile','#/reports','#/contact'].includes(h)&&window.SAMRExtraRoute){window.SAMRExtraRoute(h)}else{const m=h.match(/^#\/t\/(\w+)/);m?tool(m[1]):h==='#/draw'?draw():h==='#/tests'?tests():home()}scrollTo(0,0)};
+addEventListener('hashchange',route);route();
+</script>
+<style>#samr-extra-nav{position:sticky;bottom:0;z-index:1000;display:flex;gap:6px;padding:8px;background:var(--bg);border-top:1px solid var(--ln);justify-content:space-around}#samr-extra-nav a{flex:1;text-align:center;text-decoration:none;color:var(--tx);background:var(--cd);border:1px solid var(--ln);border-radius:10px;padding:9px 4px;font-size:12px;font-weight:700}.sx-card{background:var(--cd);border:1px solid var(--ln);border-radius:14px;padding:14px;margin:10px 0}.sx-card label{display:block;margin:9px 0 4px;font-weight:700;font-size:13px}.sx-card input,.sx-card textarea,.sx-card select{box-sizing:border-box;width:100%;padding:10px;border:1px solid var(--ln);border-radius:9px;background:var(--bg);color:var(--tx);font:inherit}.sx-btn{border:0;border-radius:10px;padding:11px 14px;background:var(--ink);color:var(--amb);font:inherit;font-weight:700;margin:5px 3px}.sx-muted{color:var(--mu);font-size:12px;line-height:1.8}.sx-item{border-bottom:1px dashed var(--ln);padding:10px 0}</style>
+
+<script>(()=>{const K='samr_profile_v1',RK='samr_reports_v1',SK='samr_session_v1',get=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},put=(k,v)=>localStorage.setItem(k,JSON.stringify(v)),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),f=(l,id,t='text',v='')=>`<label>${l}</label><input id="${id}" type="${t}" value="${esc(v)}">`;
+function auth(next){let p=get(K,{});if(get(SK,null)===p.username&&p.username)return true;app.innerHTML=`<a class="back" href="#/">→ بازگشت</a><h2>ورود به پنل SAMR</h2><div class="sx-card"><p>در اولین استفاده نام کاربری و رمز بسازید.</p>${f('نام کاربری','u','text',p.username||'')}${f('رمز عبور (حداقل ۴ حرف)','pw','password')}<button class="sx-btn" id="go">${p.username?'ورود':'ساخت حساب محلی'}</button><p class="sx-muted">اطلاعات فقط روی همین دستگاه ذخیره می‌شود. این ورود محلی است و رمزنگاری حرفه‌ای ندارد؛ از رمز مهم خود استفاده نکنید.</p><div id="msg"></div></div>`;document.getElementById('go').onclick=()=>{let u=document.getElementById('u').value.trim(),w=document.getElementById('pw').value;if(!u||w.length<4){msg.textContent='نام کاربری و رمز حداقل ۴ حرف لازم است.';return}if(p.username&&(p.username!==u||p.password!==w)){msg.textContent='نام کاربری یا رمز اشتباه است.';return}if(!p.username){p={username:u,password:w,fullName:'',phone:'',email:'',field:'',experience:''};put(K,p)}put(SK,u);location.hash=next};return false}
+function profile(){if(!auth('#/profile'))return;let p=get(K,{});app.innerHTML=`<a class="back" href="#/">→ صفحه اصلی</a><h2>پنل کاربری</h2><div class="sx-card">${f('نام و نام خانوادگی','nm','text',p.fullName)}${f('شماره تماس','ph','tel',p.phone)}${f('ایمیل','em','email',p.email)}${f('رشته / تخصص','sp','text',p.field)}${f('سابقه کاری یا توضیحات','ex','text',p.experience)}<button class="sx-btn" id="save">ذخیره مشخصات</button><button class="sx-btn" id="out">خروج</button><div id="msg"></div></div>`;save.onclick=()=>{Object.assign(p,{fullName:nm.value,phone:ph.value,email:em.value,field:sp.value,experience:ex.value});put(K,p);msg.textContent='مشخصات ذخیره شد.'};out.onclick=()=>{localStorage.removeItem(SK);location.hash='#/profile'}}
+function reports(){if(!auth('#/reports'))return;let rs=get(RK,[]);app.innerHTML=`<a class="back" href="#/">→ صفحه اصلی</a><h2>ثبت گزارش مهندسی</h2><div class="sx-card">${f('عنوان گزارش','ti')}<label>دسته‌بندی</label><select id="cat"><option>مدارهای الکتریکی</option><option>ماشین‌های الکتریکی</option><option>برق صنعتی</option><option>برق ساختمان</option><option>انرژی خورشیدی</option><option>PLC و میکروکنترلر</option><option>عیب‌یابی و تعمیرات</option><option>سایر</option></select><label>شرح گزارش</label><textarea id="de" rows="4"></textarea>${f('نتیجه محاسبه / فرمول / مقادیر','re')}<button class="sx-btn" id="add">ذخیره گزارش</button><button class="sx-btn" id="export">خروجی JSON</button><div id="msg" class="sx-muted"></div></div><h3>گزارش‌های ذخیره‌شده</h3><div class="sx-card" id="list"></div>`;function draw(){list.innerHTML=rs.length?rs.slice().reverse().map((r,i)=>`<div class="sx-item"><b>${esc(r.title)}</b><div class="sx-muted">${esc(r.category)} · ${esc(r.date)}</div><p>${esc(r.description)}</p><p>نتیجه/محاسبات: ${esc(r.result||'—')}</p><button class="sx-btn" data-d="${rs.length-1-i}">حذف</button></div>`).join(''):'هنوز گزارشی ثبت نشده است.';list.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{rs.splice(+b.dataset.d,1);put(RK,rs);draw()})}add.onclick=()=>{if(!ti.value.trim()){msg.textContent='عنوان گزارش را وارد کنید.';return}rs.push({title:ti.value,category:cat.value,description:de.value,result:re.value,date:new Date().toLocaleString('fa-IR')});put(RK,rs);msg.textContent='گزارش ذخیره شد.';draw()};export.onclick=()=>{let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(rs,null,2)],{type:'application/json'}));a.href=u;a.download='SAMR-reports.json';a.click();URL.revokeObjectURL(u)};draw()}
+function contact(){app.innerHTML='<a class="back" href="#/">→ صفحه اصلی</a><h2>راه‌های ارتباطی</h2><div class="sx-card"><p>اطلاعات ارتباطی بعداً تکمیل می‌شود.</p><p>☎ تماس: به‌زودی</p><p>✉ ایمیل: به‌زودی</p><p>💬 پیام‌رسان‌ها: به‌زودی</p></div>'}
+window.SAMRExtraRoute=function(h){if(h==='#/profile')profile();else if(h==='#/reports')reports();else if(h==='#/contact')contact()};})();</script>
+
+<button id="samr-menu-toggle" aria-label="باز کردن منو" title="منو">⋮</button>
+<div id="samr-drawer-shade"></div>
+<aside id="samr-drawer" aria-label="پنل‌های جانبی">
+<h3>پنل‌های SAMR</h3>
+<a href="#/profile">👤 پنل کاربری</a>
+<a href="#/reports">📝 ثبت گزارش‌ها</a>
+<a href="#/contact">☎ راه‌های ارتباطی</a>
+<a href="#/" id="samr-drawer-home">⌂ صفحهٔ اصلی</a>
+<p class="sx-muted">برای بستن منو، بیرون آن لمس کنید.</p>
+</aside>
+<script>
+(()=>{
+const btn=document.getElementById('samr-menu-toggle'), drawer=document.getElementById('samr-drawer'), shade=document.getElementById('samr-drawer-shade');
+if(!btn||!drawer||!shade)return;
+function close(){drawer.classList.remove('open');shade.style.display='none'}
+btn.addEventListener('click',()=>{const open=!drawer.classList.contains('open');drawer.classList.toggle('open',open);shade.style.display=open?'block':'none'});
+shade.addEventListener('click',close);
+drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+})();
+</script>
+</body></html>
