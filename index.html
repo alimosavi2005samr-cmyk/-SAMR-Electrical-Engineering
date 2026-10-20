@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#176b45">
+<title>برنج‌یار</title>
+<style>
+:root{--green:#176b45;--green2:#e8f5ed;--bg:#f5f8f5;--ink:#173126;--muted:#6b7b72;--red:#b42318;--gold:#b7791f}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,"Arial",sans-serif;font-size:14px}
+header{background:linear-gradient(135deg,#145b3b,#218457);color:#fff;padding:20px 16px 18px;border-radius:0 0 22px 22px}
+.brand{display:flex;align-items:center;gap:10px}.logo{width:45px;height:45px;border-radius:15px;background:#fff2;display:grid;place-items:center;font-size:25px}
+h1{font-size:23px;margin:0}header p{margin:7px 0 0;color:#e0f2e7;font-size:12px}
+main{max-width:760px;margin:auto;padding:14px 12px 86px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:0 0 14px}
+.card{background:white;border:1px solid #e5eee8;border-radius:16px;padding:13px;box-shadow:0 3px 12px #143e2010}
+.card .label{color:var(--muted);font-size:12px}.card .num{font-weight:bold;font-size:19px;margin-top:8px;overflow-wrap:anywhere}.card small{color:var(--muted)}
+.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 12px;position:sticky;top:0;background:var(--bg);z-index:3}
+.tab{border:1px solid #d9e6dd;background:#fff;border-radius:12px;padding:10px 13px;white-space:nowrap;color:var(--green);font-weight:bold}
+.tab.active{background:var(--green);color:#fff;border-color:var(--green)}
+.panel{display:none}.panel.active{display:block}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 2px 12px}.section-head h2{font-size:17px;margin:0}
+button{font-family:inherit;cursor:pointer}.primary{background:var(--green);color:#fff;border:0;border-radius:11px;padding:11px 14px;font-weight:bold}.secondary{background:var(--green2);color:var(--green);border:1px solid #cce6d5;border-radius:10px;padding:9px 11px}.danger{background:#fff0ef;color:var(--red);border:1px solid #f3c5c1;border-radius:9px;padding:7px 9px}.smallbtn{font-size:12px;padding:7px 9px}
+form,.box{background:#fff;border:1px solid #e2ebe4;border-radius:16px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.full{grid-column:1/-1}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d8e3db;border-radius:10px;background:#fff;font-family:inherit;font-size:14px;color:var(--ink);min-width:0}
+input:focus,select:focus{outline:2px solid #a6d7b8;border-color:var(--green)}
+.form-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.list-item{background:#fff;border:1px solid #e4ece6;border-radius:14px;padding:12px;margin-bottom:9px}
+.item-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.item-title{font-weight:bold;font-size:14px}.muted{color:var(--muted);font-size:12px;line-height:1.8}.money{font-weight:bold;color:var(--green)}.bad{color:var(--red)!important}.good{color:var(--green)!important}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.pill{background:#f0f6f1;border-radius:8px;padding:5px 8px;font-size:12px}
+.empty{text-align:center;color:var(--muted);padding:28px 10px;background:#fff;border-radius:14px;border:1px dashed #cbdacf}
+hr{border:0;border-top:1px solid #e6eee8;margin:12px 0}
+.notice{font-size:12px;color:#5d6f63;line-height:1.9;background:#f0f7f2;border-radius:12px;padding:11px;margin-bottom:12px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e2ebe4;text-align:center;padding:9px;color:#708077;font-size:11px}
+@media(min-width:600px){.cards{grid-template-columns:repeat(4,minmax(0,1fr))}.card .num{font-size:18px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">🌾</div><div><h1>برنج‌یار</h1><p>مدیریت فروش، انبار و حساب مشتریان — نسخه محلی برنج‌یار</p></div></div></header>
+<main>
+<div class="cards">
+ <div class="card"><div class="label">فروش امروز</div><div class="num" id="todaySales">۰ تومان</div></div>
+ <div class="card"><div class="label">سود ناخالص امروز</div><div class="num" id="todayProfit">۰ تومان</div></div>
+ <div class="card"><div class="label">بدهی مشتریان</div><div class="num" id="allDebt">۰ تومان</div></div>
+ <div class="card"><div class="label">موجودی انبار</div><div class="num" id="stockKg">۰ کیلو</div></div>
+</div>
+<div class="tabs">
+<button class="tab active" data-tab="sales">ثبت فروش</button>
+<button class="tab" data-tab="customers">مشتریان</button>
+<button class="tab" data-tab="stock">انبار و خرید</button>
+<button class="tab" data-tab="payments">ثبت پرداخت</button>
+<button class="tab" data-tab="bank">واریزی پیامکی</button>
+<button class="tab" data-tab="reports">گزارش‌ها</button>
+<button class="tab" data-tab="backup">پشتیبان‌گیری</button>
+</div>
+<section id="sales" class="panel active">
+ <div class="section-head"><h2>ثبت فروش جدید</h2></div>
+ <form id="saleForm">
+ <input type="hidden" id="saleEditId">
+ <div class="grid">
+  <div><label>مشتری</label><select id="saleCustomer"></select></div>
+  <div><label>تاریخ فروش</label><input id="saleDate" type="date" required></div>
+  <div><label>نوع برنج / محموله</label><select id="saleLot" required></select></div>
+  <div><label>مقدار فروش (کیلوگرم)</label><input id="saleQty" type="number" min="0.01" step="0.01" required></div>
+  <div><label>قیمت فروش هر کیلو (تومان)</label><input id="salePrice" type="number" min="0" step="1" required></div>
+  <div><label>مبلغ پرداختی همین لحظه (تومان)</label><input id="salePaid" type="number" min="0" step="1" value="0"></div>
+  <div><label>روش پرداخت</label><select id="saleMethod"><option>نقدی</option><option>کارت‌به‌کارت</option><option>نسیه</option><option>ترکیبی</option></select></div>
+  <div><label>توضیحات</label><input id="saleNote" placeholder="اختیاری"></div>
+ </div>
+ <div class="notice" id="salePreview">مبلغ کل، سود تقریبی و مانده پس از واردکردن مقدار و قیمت نمایش داده می‌شود.</div>
+ <div class="form-actions"><button class="primary" type="submit">ثبت فروش</button><button class="secondary" type="button" id="cancelSaleEdit" hidden>لغو ویرایش</button></div>
+ </form>
+ <div class="section-head"><h2>آخرین فروش‌ها</h2><button class="secondary smallbtn" id="newCustomerQuick">+ مشتری جدید</button></div>
+ <div id="salesList"></div>
+</section>
+<section id="customers" class="panel">
+ <div class="section-head"><h2>مشتریان</h2></div>
+ <form id="customerForm"><input type="hidden" id="customerEditId"><div class="grid">
+ <div><label>نام مشتری</label><input id="customerName" required></div>
+ <div><label>شماره تماس</label><input id="customerPhone" inputmode="tel"></div>
+ <div class="full"><label>یادداشت</label><input id="customerNote"></div>
+ </div><div class="form-actions"><button class="primary" type="submit">ذخیره مشتری</button><button type="button" class="secondary" id="cancelCustomerEdit" hidden>لغو ویرایش</button></div></form>
+ <div id="customersList"></div>
+</section>
+<section id="stock" class="panel">
+ <div class="section-head"><h2>ثبت محموله خرید</h2></div>
+ <form id="lotForm"><input type="hidden" id="lotEditId"><div class="grid">
+ <div><label>نوع برنج</label><input id="lotType" placeholder="مثلاً محلی مینودشت امسالی" required></div>
+ <div><label>تاریخ خرید</label><input id="lotDate" type="date" required></div>
+ <div><label>مقدار خرید (کیلوگرم)</label><input id="lotQty" type="number" min="0.01" step="0.01" required></div>
+ <div><label>قیمت خرید هر کیلو (تومان)</label><input id="lotCost" type="number" min="0" step="1" required></div>
+ <div><label>هزینه جانبی کل (تومان)</label><input id="lotExtra" type="number" min="0" step="1" value="0"></div>
+ </div><div class="form-actions"><button class="primary" type="submit">ذخیره محموله</button><button class="secondary" type="button" id="cancelLotEdit" hidden>لغو ویرایش</button></div></form>
+ <div class="section-head"><h2>موجودی محموله‌ها</h2></div><div id="lotsList"></div>
+</section>
+<section id="payments" class="panel">
+ <div class="section-head"><h2>ثبت پرداخت بدهی</h2></div>
+ <form id="paymentForm"><div class="grid">
+ <div><label>مشتری</label><select id="paymentCustomer" required></select></div>
+ <div><label>تاریخ پرداخت</label><input id="paymentDate" type="date" required></div>
+ <div><label>مبلغ پرداختی (تومان)</label><input id="paymentAmount" type="number" min="1" step="1" required></div>
+ <div><label>روش پرداخت</label><select id="paymentMethod"><option>کارت‌به‌کارت</option><option>نقدی</option><option>واریز بانکی</option><option>سایر</option></select></div>
+ <div class="full"><label>تخصیص به خرید(ها)</label><div id="paymentAllocations" class="muted">ابتدا مشتری را انتخاب کنید.</div></div>
+ <div class="full"><label>یادداشت / شناسه پیگیری</label><input id="paymentNote"></div>
+ </div><div class="form-actions"><button class="primary" type="submit">ثبت پرداخت</button></div></form>
+ <div class="section-head"><h2>پرداخت‌های اخیر</h2></div><div id="paymentsList"></div>
+</section>
+<section id="bank" class="panel">
+ <div class="section-head"><h2>واریزی‌های پیامکی</h2></div>
+ <div class="notice">پیامک فقط مبلغ و زمان را پیشنهاد می‌دهد؛ چون نام واریزکننده در پیامک نیست، هیچ پرداختی بدون انتخاب مشتری و تأیید تو ثبت نمی‌شود. پیامک‌های شناسایی‌شده روی همین گوشی نگهداری می‌شوند.</div>
+ <div class="box"><div class="item-title">وضعیت دریافت پیامک</div><div id="smsStatus" class="muted">اگر نسخه اندرویدی و مجوز پیامک فعال باشد، پیامک‌های جدید اینجا نمایش داده می‌شوند. در نسخه مرورگری، دریافت خودکار پیامک در دسترس نیست.</div><div class="form-actions"><button class="secondary" type="button" id="refreshSms">بررسی پیامک‌های جدید</button></div></div>
+ <div class="section-head"><h2>واریزی‌های تعیین‌تکلیف‌نشده</h2></div><div id="pendingDepositsList"></div>
+ <div class="section-head"><h2>بستانکاری مشتریان</h2></div><div id="customerCreditsList"></div>
+</section>
+<section id="reports" class="panel">
+ <div class="section-head"><h2>گزارش‌ها</h2></div>
+ <div class="cards">
+ <div class="card"><div class="label">فروش کل ثبت‌شده</div><div class="num" id="totalSales">۰</div></div>
+ <div class="card"><div class="label">سود ناخالص کل</div><div class="num" id="totalProfit">۰</div></div>
+ <div class="card"><div class="label">مجموع دریافت‌ها</div><div class="num" id="totalReceived">۰</div></div>
+ <div class="card"><div class="label">مانده بدهی</div><div class="num" id="reportDebt">۰</div></div>
+ </div>
+ <div class="box">
+  <h3 style="margin-top:0">نمودار سود روزانه</h3>
+  <p class="muted">سود ناخالص هر روز در ۳۰ روز اخیر، بر اساس فروش‌های ثبت‌شده</p>
+  <div style="height:230px;position:relative"><canvas id="dailyProfitChart" aria-label="نمودار سود روزانه" style="width:100%;height:230px;display:block"></canvas></div>
+ </div>
+ <div class="box">
+  <h3 style="margin-top:0">نمودار سود ماهانه</h3>
+  <p class="muted">سود ناخالص هر ماه در ۱۲ ماه اخیر</p>
+  <div style="height:230px;position:relative"><canvas id="monthlyProfitChart" aria-label="نمودار سود ماهانه" style="width:100%;height:230px;display:block"></canvas></div>
+ </div>
+ <div class="box">
+  <h3 style="margin-top:0">نمودار سود سالانه</h3>
+  <p class="muted">مقایسه سود ناخالص سال‌های دارای فروش ثبت‌شده</p>
+  <div style="height:230px;position:relative"><canvas id="yearlyProfitChart" aria-label="نمودار سود سالانه" style="width:100%;height:230px;display:block"></canvas></div>
+ </div>
+ <div class="box"><label>جست‌وجوی فروش (نام مشتری یا نوع برنج)</label><input id="reportSearch" placeholder="جست‌وجو..."></div>
+ <div id="reportSalesList"></div>
+</section>
+<section id="backup" class="panel">
+ <div class="section-head"><h2>پشتیبان‌گیری و بازیابی</h2></div>
+ <div class="notice">اطلاعات این نسخه فقط در حافظه مرورگر همین گوشی ذخیره می‌شود. پاک‌کردن داده‌های مرورگر یا بازکردن فایل در مرورگر دیگر ممکن است اطلاعات را از دسترس خارج کند؛ مرتب فایل پشتیبان بگیر.</div>
+ <div class="box"><h3>تهیه نسخه پشتیبان</h3><p class="muted">اطلاعات مشتریان، محموله‌ها، فروش‌ها و پرداخت‌ها را در یک فایل JSON ذخیره کن.</p><button class="primary" id="exportBackup">دانلود فایل پشتیبان</button></div>
+ <div class="box"><h3>بازیابی نسخه پشتیبان</h3><p class="muted">فایل پشتیبان قبلی را انتخاب کن. بازیابی، اطلاعات فعلی برنامه را جایگزین می‌کند.</p><input type="file" id="importFile" accept=".json,application/json"><button class="primary" id="importBackup" style="margin-top:10px">بازیابی اطلاعات</button></div>
+ <div class="box"><h3>پاک‌کردن همه اطلاعات</h3><p class="muted">این کار برگشت‌پذیر نیست مگر اینکه فایل پشتیبان داشته باشی.</p><button class="danger" id="clearAll">حذف همه اطلاعات</button></div>
+</section>
+</main>
+<div class="bottom">برنج‌یار • نسخه آزمایشی آفلاین • ارقام به تومان</div>
+<script>
+const $=id=>document.getElementById(id);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const fmt=n=>Math.round(Number(n)||0).toLocaleString('fa-IR');
+const kg=n=>(Number(n)||0).toLocaleString('fa-IR',{maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const load=()=>{try{const x=JSON.parse(localStorage.getItem('berenjyAR_v1'))||{};return {customers:x.customers||[],lots:x.lots||[],sales:x.sales||[],payments:x.payments||[],pendingDeposits:x.pendingDeposits||[],bankSmsIds:x.bankSmsIds||[]}}catch{return {customers:[],lots:[],sales:[],payments:[],pendingDeposits:[],bankSmsIds:[]}}};
+let db=load();
+function save(){localStorage.setItem('berenjyAR_v1',JSON.stringify(db));renderAll()}
+function dateFa(d){if(!d)return '—';try{return new Date(d+'T12:00:00').toLocaleDateString('fa-IR')}catch{return d}}
+function lotSold(lotId,excludeSaleId=null){return db.sales.filter(s=>s.lotId===lotId&&s.id!==excludeSaleId&&!s.cancelled).reduce((a,s)=>a+Number(s.qty),0)}
+function lotAvailable(l){return Number(l.qty)-lotSold(l.id)}
+function saleTotal(s){return Number(s.qty)*Number(s.price)}
+function saleProfit(s){const l=db.lots.find(x=>x.id===s.lotId);return saleTotal(s)-Number(s.qty)*(l?Number(l.cost)+Number(l.extra||0)/Math.max(Number(l.qty),0.01):0)}
+function saleAllocated(s){return db.payments.reduce((sum,p)=>sum+(p.allocations||[]).filter(a=>a.saleId===s.id).reduce((x,a)=>x+Number(a.amount),0),0)+Number(s.initialPaid||0)}
+function saleDebt(s){return Math.max(0,saleTotal(s)-saleAllocated(s))}
+function customerDebt(id){return Math.max(0,db.sales.filter(s=>s.customerId===id&&!s.cancelled).reduce((sum,s)=>sum+saleDebt(s),0)-Number(db.customers.find(c=>c.id===id)?.credit||0))}
+function customerName(id){return db.customers.find(c=>c.id===id)?.name||'مشتری حذف‌شده/ثبت‌نشده'}
+function lotName(id){let l=db.lots.find(l=>l.id===id);return l?`${l.type} — ${dateFa(l.date)}`:'محموله حذف‌شده'}
+function fillSelect(id,items,placeholder,label){const sel=$(id),old=sel.value;sel.innerHTML=`<option value="">${placeholder}</option>`+items.map(x=>`<option value="${x.id}">${esc(label(x))}</option>`).join('');if(items.some(x=>x.id===old))sel.value=old}
+function renderSelects(){fillSelect('saleCustomer',db.customers,'انتخاب مشتری (اختیاری)',c=>c.name);fillSelect('paymentCustomer',db.customers,'انتخاب مشتری',c=>`${c.name} — بدهی ${fmt(customerDebt(c.id))} تومان`);fillSelect('saleLot',db.lots.filter(l=>lotAvailable(l)>0),'انتخاب محموله دارای موجودی',l=>`${l.type} | موجودی ${kg(lotAvailable(l))} کیلو`)}
+function renderDashboard(){const ds=db.sales.filter(s=>s.date===today()&&!s.cancelled);$('todaySales').textContent=fmt(ds.reduce((a,s)=>a+saleTotal(s),0))+' تومان';$('todayProfit').textContent=fmt(ds.reduce((a,s)=>a+saleProfit(s),0))+' تومان';$('allDebt').textContent=fmt(db.customers.reduce((a,c)=>a+customerDebt(c.id),0))+' تومان';$('stockKg').textContent=kg(db.lots.reduce((a,l)=>a+lotAvailable(l),0))+' کیلو';$('totalSales').textContent=fmt(db.sales.filter(s=>!s.cancelled).reduce((a,s)=>a+saleTotal(s),0))+' تومان';$('totalProfit').textContent=fmt(db.sales.filter(s=>!s.cancelled).reduce((a,s)=>a+saleProfit(s),0))+' تومان';$('totalReceived').textContent=fmt(db.sales.reduce((a,s)=>a+Number(s.initialPaid||0),0)+db.payments.reduce((a,p)=>a+Number(p.amount),0))+' تومان';$('reportDebt').textContent=fmt(db.customers.reduce((a,c)=>a+customerDebt(c.id),0))+' تومان'}
+function renderSales(){let arr=[...db.sales].sort((a,b)=>b.date.localeCompare(a.date));$('salesList').innerHTML=arr.length?arr.map(s=>`<div class="list-item"><div class="item-top"><div><div class="item-title">${esc(customerName(s.customerId))} · ${esc(db.lots.find(l=>l.id===s.lotId)?.type||'برنج')}</div><div class="muted">${dateFa(s.date)} · ${kg(s.qty)} کیلو · ${esc(s.method||'')}</div></div><strong class="${s.cancelled?'bad':'money'}">${s.cancelled?'لغو شده':fmt(saleTotal(s))+' تومان'}</strong></div><div class="pills"><span class="pill">سود ناخالص: ${fmt(saleProfit(s))}</span><span class="pill">پرداخت: ${fmt(saleAllocated(s))}</span><span class="pill">بدهی: ${fmt(saleDebt(s))}</span></div>${s.note?`<div class="muted">${esc(s.note)}</div>`:''}<div class="form-actions"><button class="secondary smallbtn" onclick="editSale('${s.id}')">ویرایش</button><button class="secondary smallbtn" onclick="cancelSale('${s.id}')">${s.cancelled?'بازگردانی فروش':'لغو فروش'}</button><button class="danger smallbtn" onclick="deleteSale('${s.id}')">حذف</button></div></div>`).join(''):'<div class="empty">هنوز فروشی ثبت نشده است.</div>'}
+function renderCustomers(){$('customersList').innerHTML=db.customers.length?[...db.customers].sort((a,b)=>a.name.localeCompare(b.name,'fa')).map(c=>`<div class="list-item"><div class="item-top"><div><div class="item-title">${esc(c.name)}</div><div class="muted">${esc(c.phone||'بدون شماره')} ${c.note?' · '+esc(c.note):''}</div></div><strong class="${customerDebt(c.id)>0?'bad':'money'}">${fmt(customerDebt(c.id))} تومان بدهی</strong></div><div class="pills"><span class="pill">تعداد خرید: ${db.sales.filter(s=>s.customerId===c.id&&!s.cancelled).length.toLocaleString('fa-IR')}</span></div><div class="form-actions"><button class="secondary smallbtn" onclick="showCustomerHistory('${c.id}')">سوابق خرید</button><button class="secondary smallbtn" onclick="editCustomer('${c.id}')">ویرایش</button><button class="danger smallbtn" onclick="deleteCustomer('${c.id}')">حذف</button></div><div id="history_${c.id}"></div></div>`).join(''):'<div class="empty">هنوز مشتری ثبت نشده است.</div>'}
+function renderLots(){$('lotsList').innerHTML=db.lots.length?[...db.lots].sort((a,b)=>b.date.localeCompare(a.date)).map(l=>`<div class="list-item"><div class="item-top"><div><div class="item-title">${esc(l.type)}</div><div class="muted">خرید: ${dateFa(l.date)} · قیمت پایه: ${fmt(l.cost)} تومان/کیلو</div></div><strong class="money">${kg(lotAvailable(l))} کیلو</strong></div><div class="pills"><span class="pill">اولیه: ${kg(l.qty)} کیلو</span><span class="pill">فروخته: ${kg(lotSold(l.id))} کیلو</span><span class="pill">هزینه جانبی: ${fmt(l.extra||0)} تومان</span></div><div class="form-actions"><button class="secondary smallbtn" onclick="editLot('${l.id}')">ویرایش</button><button class="danger smallbtn" onclick="deleteLot('${l.id}')">حذف</button></div></div>`).join(''):'<div class="empty">هنوز محموله‌ای ثبت نشده است.</div>'}
+function renderPayments(){$('paymentsList').innerHTML=db.payments.length?[...db.payments].sort((a,b)=>b.date.localeCompare(a.date)).map(p=>`<div class="list-item"><div class="item-top"><div><div class="item-title">${esc(customerName(p.customerId))}</div><div class="muted">${dateFa(p.date)} · ${esc(p.method)}</div></div><strong class="money">${fmt(p.amount)} تومان</strong></div><div class="muted">تخصیص به ${p.allocations.length} خرید ${p.note?' · '+esc(p.note):''}</div><div class="form-actions"><button class="danger smallbtn" onclick="deletePayment('${p.id}')">حذف پرداخت و اصلاح بدهی</button></div></div>`).join(''):'<div class="empty">هنوز پرداختی ثبت نشده است.</div>'}
+function drawProfitChart(canvasId, labels, values, mode){
+ const canvas=$(canvasId); if(!canvas) return;
+ const rect=canvas.getBoundingClientRect(); const w=Math.max(280,Math.floor(rect.width||320)), h=230, dpr=window.devicePixelRatio||1;
+ canvas.width=w*dpr; canvas.height=h*dpr;
+ const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);
+ const pad={l:12,r:12,t:16,b:42}, cw=w-pad.l-pad.r,ch=h-pad.t-pad.b;
+ const max=Math.max(1,...values.map(v=>Math.max(0,v)));
+ ctx.font='10px Tahoma, Arial';ctx.textAlign='right';ctx.textBaseline='middle';
+ for(let i=0;i<=4;i++){const y=pad.t+ch*i/4;ctx.strokeStyle='#e4ece6';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();
+   const v=max*(1-i/4);ctx.fillStyle='#718078';ctx.textAlign='left';ctx.fillText(v>=1000000?(v/1000000).toLocaleString('fa-IR',{maximumFractionDigits:1})+'م':v>=1000?(v/1000).toLocaleString('fa-IR',{maximumFractionDigits:0})+'ه':fmt(v),pad.l,y-7);
+ }
+ const n=values.length; if(!n){ctx.fillStyle='#718078';ctx.textAlign='center';ctx.fillText('هنوز داده‌ای برای نمایش وجود ندارد',w/2,h/2);return;}
+ const slot=cw/n, bw=Math.max(3,Math.min(24,slot*.58));
+ values.forEach((v,i)=>{const bh=Math.max(0,(Math.max(0,v)/max)*ch),x=pad.l+i*slot+(slot-bw)/2,y=pad.t+ch-bh;
+   ctx.fillStyle='#218457';ctx.beginPath();
+   const rr=Math.min(5,bw/2,bh/2);ctx.moveTo(x,y+rr);ctx.arcTo(x,y,x+rr,y,rr);ctx.arcTo(x+bw,y,x+bw,y+rr,rr);ctx.lineTo(x+bw,y+bh);ctx.lineTo(x,y+bh);ctx.closePath();ctx.fill();
+   const every=mode==='daily'?5:mode==='monthly'?2:1;
+   if(i%every===0 || i===n-1){ctx.save();ctx.translate(x+bw/2,h-26);ctx.rotate(-Math.PI/4);ctx.fillStyle='#53645a';ctx.textAlign='right';ctx.textBaseline='middle';ctx.font='10px Tahoma, Arial';ctx.fillText(labels[i],0,0);ctx.restore();}
+ });
+}
+function profitGroups(){
+ const active=db.sales.filter(s=>!s.cancelled);
+ const dailyLabels=[],dailyValues=[], now=new Date();now.setHours(12,0,0,0);
+ for(let i=29;i>=0;i--){const d=new Date(now);d.setDate(d.getDate()-i);const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+   dailyLabels.push(`${d.getMonth()+1}/${d.getDate()}`);dailyValues.push(active.filter(s=>s.date===key).reduce((a,s)=>a+saleProfit(s),0));}
+ const monthlyLabels=[],monthlyValues=[];
+ for(let i=11;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1,12);const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+   monthlyLabels.push(`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}`);monthlyValues.push(active.filter(s=>String(s.date||'').slice(0,7)===key).reduce((a,s)=>a+saleProfit(s),0));}
+ const yearMap={};active.forEach(s=>{const y=String(s.date||'').slice(0,4);if(y)yearMap[y]=(yearMap[y]||0)+saleProfit(s)});
+ let years=Object.keys(yearMap).sort();if(!years.length)years=[String(now.getFullYear())];
+ return {dailyLabels,dailyValues,monthlyLabels,monthlyValues,yearLabels:years,yearValues:years.map(y=>yearMap[y]||0)};
+}
+function renderProfitCharts(){const g=profitGroups();drawProfitChart('dailyProfitChart',g.dailyLabels,g.dailyValues,'daily');drawProfitChart('monthlyProfitChart',g.monthlyLabels,g.monthlyValues,'monthly');drawProfitChart('yearlyProfitChart',g.yearLabels,g.yearValues,'yearly')}
+function renderReport(){const q=($('reportSearch').value||'').trim().toLowerCase();let arr=[...db.sales].filter(s=>(customerName(s.customerId)+' '+(db.lots.find(l=>l.id===s.lotId)?.type||'')).toLowerCase().includes(q)).sort((a,b)=>b.date.localeCompare(a.date));$('reportSalesList').innerHTML=arr.length?arr.map(s=>`<div class="list-item"><div class="item-title">${esc(customerName(s.customerId))} · ${esc(db.lots.find(l=>l.id===s.lotId)?.type||'')}</div><div class="muted">${dateFa(s.date)} · ${kg(s.qty)} کیلو</div><div class="pills"><span class="pill">فروش: ${fmt(saleTotal(s))}</span><span class="pill">سود: ${fmt(saleProfit(s))}</span><span class="pill">بدهی: ${fmt(saleDebt(s))}</span>${s.cancelled?'<span class="pill bad">لغو شده</span>':''}</div></div>`).join(''):'<div class="empty">موردی پیدا نشد.</div>';renderProfitCharts()}
+function renderAllocations(){const cid=$('paymentCustomer').value;let arr=db.sales.filter(s=>s.customerId===cid&&!s.cancelled&&saleDebt(s)>0).sort((a,b)=>a.date.localeCompare(b.date));$('paymentAllocations').innerHTML=arr.length?arr.map(s=>`<label class="list-item" style="display:block"><div><input type="checkbox" class="allocCheck" value="${s.id}" style="width:auto;margin-left:6px"> ${dateFa(s.date)} · ${esc(db.lots.find(l=>l.id===s.lotId)?.type||'برنج')} · بدهی ${fmt(saleDebt(s))} تومان</div><input class="allocAmount" data-sale="${s.id}" type="number" min="0" max="${saleDebt(s)}" step="1" placeholder="مبلغ تخصیص به این خرید" style="margin-top:8px"></label>`).join(''):'<div class="muted">برای این مشتری خرید بدهکار ثبت نشده است.</div>'}
+function renderAll(){renderSelects();renderDashboard();renderSales();renderCustomers();renderLots();renderPayments();renderReport();renderBankDeposits();if($('paymentCustomer').value)renderAllocations();updatePreview()}
+function updatePreview(){let lot=db.lots.find(l=>l.id===$('saleLot').value),qty=Number($('saleQty').value)||0,price=Number($('salePrice').value)||0,paid=Number($('salePaid').value)||0,total=qty*price,cost=lot?Number(lot.cost)+(Number(lot.extra||0)/Math.max(Number(lot.qty),.01)):0,profit=total-qty*cost;$('salePreview').innerHTML=`مبلغ کل: <b>${fmt(total)} تومان</b> · سود ناخالص تقریبی: <b>${fmt(profit)} تومان</b> · مانده این خرید پس از پرداخت اولیه: <b>${fmt(Math.max(0,total-paid))} تومان</b>${lot?`<br>موجودی فعلی محموله: ${kg(lotAvailable(lot))} کیلو`:''}`}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));if(b.dataset.tab==='payments')renderAllocations()}));
+$('saleDate').value=today();$('lotDate').value=today();$('paymentDate').value=today();
+['saleQty','salePrice','salePaid','saleLot'].forEach(id=>$(id).addEventListener('input',updatePreview));
+$('saleForm').addEventListener('submit',e=>{e.preventDefault();let id=$('saleEditId').value,lotId=$('saleLot').value,lot=db.lots.find(l=>l.id===lotId),qty=Number($('saleQty').value),paid=Number($('salePaid').value)||0,old=db.sales.find(s=>s.id===id);if(!lot){alert('لطفاً محموله را انتخاب کن.');return}if(paid>qty*Number($('salePrice').value)){if(!confirm('مبلغ پرداختی از مبلغ کل بیشتر است. ادامه می‌دهی؟'))return}if(qty>lotAvailable(lot)+(old&&old.lotId===lotId&&!old.cancelled?Number(old.qty):0)){alert('موجودی این محموله کافی نیست.');return}let customerId=$('saleCustomer').value||'',saleTotalValue=qty*Number($('salePrice').value);if(!old&&customerId){let cust=db.customers.find(c=>c.id===customerId);if(cust&&Number(cust.credit||0)>0){let used=Math.min(Number(cust.credit),Math.max(0,saleTotalValue-paid));cust.credit=Number(cust.credit)-used;paid+=used;}}let data={id:id||uid(),customerId,lotId,qty,date:$('saleDate').value,price:Number($('salePrice').value),initialPaid:paid,method:$('saleMethod').value,note:$('saleNote').value,cancelled:old?.cancelled||false};if(old){if(old.initialPaid||db.payments.some(p=>p.allocations.some(a=>a.saleId===old.id))){if(!confirm('برای این فروش پرداخت ثبت شده است. ویرایش مقدار، قیمت یا مشتری ممکن است حساب‌ها را تغییر دهد. ادامه؟'))return}db.sales=db.sales.map(s=>s.id===id?data:s)}else db.sales.push(data);resetSaleForm();save();alert('فروش ذخیره شد.')});
+function resetSaleForm(){ $('saleForm').reset();$('saleEditId').value='';$('saleDate').value=today();$('salePaid').value=0;$('cancelSaleEdit').hidden=true;renderSelects();updatePreview()}
+$('cancelSaleEdit').onclick=resetSaleForm;
+window.editSale=id=>{let s=db.sales.find(x=>x.id===id);if(!s)return;$('saleEditId').value=s.id;renderSelects();$('saleCustomer').value=s.customerId||'';$('saleDate').value=s.date;$('saleLot').value=s.lotId;$('saleQty').value=s.qty;$('salePrice').value=s.price;$('salePaid').value=s.initialPaid||0;$('saleMethod').value=s.method||'نقدی';$('saleNote').value=s.note||'';$('cancelSaleEdit').hidden=false;document.querySelector('[data-tab="sales"]').click();updatePreview();window.scrollTo({top:0,behavior:'smooth'})};
+window.cancelSale=id=>{let s=db.sales.find(x=>x.id===id);if(!s)return;if(!confirm(s.cancelled?'فروش به حالت فعال برگردد؟':'فروش لغو شود؟ موجودی دوباره محاسبه می‌شود.'))return;s.cancelled=!s.cancelled;save()};
+window.deleteSale=id=>{let s=db.sales.find(x=>x.id===id);if(!s)return;if(db.payments.some(p=>p.allocations.some(a=>a.saleId===id))&&!confirm('برای این خرید پرداخت تخصیص یافته. حذف آن ممکن است حساب را تغییر دهد. ادامه؟'))return;if(!confirm('فروش حذف شود؟'))return;db.payments.forEach(p=>p.allocations=p.allocations.filter(a=>a.saleId!==id));db.sales=db.sales.filter(x=>x.id!==id);save()};
+$('customerForm').addEventListener('submit',e=>{e.preventDefault();let id=$('customerEditId').value,old=db.customers.find(c=>c.id===id),c={id:id||uid(),name:$('customerName').value.trim(),phone:$('customerPhone').value.trim(),note:$('customerNote').value.trim(),credit:Number(old?.credit||0)};if(!c.name)return;if(old)db.customers=db.customers.map(x=>x.id===id?c:x);else db.customers.push(c);resetCustomerForm();save()});
+function resetCustomerForm(){$('customerForm').reset();$('customerEditId').value='';$('cancelCustomerEdit').hidden=true}
+$('cancelCustomerEdit').onclick=resetCustomerForm;
+window.editCustomer=id=>{let c=db.customers.find(x=>x.id===id);if(!c)return;$('customerEditId').value=id;$('customerName').value=c.name;$('customerPhone').value=c.phone||'';$('customerNote').value=c.note||'';$('cancelCustomerEdit').hidden=false;document.querySelector('[data-tab="customers"]').click();window.scrollTo({top:0,behavior:'smooth'})};
+window.deleteCustomer=id=>{if(db.sales.some(s=>s.customerId===id&&!s.cancelled)){alert('این مشتری سابقه فروش دارد؛ برای حفظ سوابق مالی حذف نمی‌شود. می‌توانی نام یا اطلاعاتش را ویرایش کنی.');return}if(confirm('مشتری حذف شود؟')){db.customers=db.customers.filter(c=>c.id!==id);save()}};
+window.showCustomerHistory=id=>{let c=db.customers.find(c=>c.id===id),el=$('history_'+id);if(!c||!el)return;let arr=db.sales.filter(s=>s.customerId===id).sort((a,b)=>b.date.localeCompare(a.date));el.innerHTML=`<hr><b>سوابق ${esc(c.name)}</b>`+(arr.length?arr.map(s=>`<div class="muted">${dateFa(s.date)} · ${esc(db.lots.find(l=>l.id===s.lotId)?.type||'برنج')} · ${kg(s.qty)} کیلو · فروش ${fmt(saleTotal(s))} · مانده ${fmt(saleDebt(s))} تومان ${s.cancelled?'(لغو شده)':''}</div>`).join(''):'<div class="muted">سابقه‌ای ندارد.</div>')};
+$('lotForm').addEventListener('submit',e=>{e.preventDefault();let id=$('lotEditId').value,old=db.lots.find(l=>l.id===id),l={id:id||uid(),type:$('lotType').value.trim(),date:$('lotDate').value,qty:Number($('lotQty').value),cost:Number($('lotCost').value),extra:Number($('lotExtra').value)||0};if(old&&lotSold(id)>l.qty){alert('مقدار اولیه نمی‌تواند کمتر از مقدار فروخته‌شده باشد.');return}if(old)db.lots=db.lots.map(x=>x.id===id?l:x);else db.lots.push(l);resetLotForm();save()});
+function resetLotForm(){$('lotForm').reset();$('lotEditId').value='';$('lotDate').value=today();$('lotExtra').value=0;$('cancelLotEdit').hidden=true}
+$('cancelLotEdit').onclick=resetLotForm;
+window.editLot=id=>{let l=db.lots.find(x=>x.id===id);if(!l)return;$('lotEditId').value=id;$('lotType').value=l.type;$('lotDate').value=l.date;$('lotQty').value=l.qty;$('lotCost').value=l.cost;$('lotExtra').value=l.extra||0;$('cancelLotEdit').hidden=false;document.querySelector('[data-tab="stock"]').click();window.scrollTo({top:0,behavior:'smooth'})};
+window.deleteLot=id=>{if(db.sales.some(s=>s.lotId===id)){alert('این محموله سابقه فروش دارد و برای حفظ دقت حساب‌ها حذف نمی‌شود.');return}if(confirm('محموله حذف شود؟')){db.lots=db.lots.filter(l=>l.id!==id);save()}};
+$('paymentCustomer').addEventListener('change',renderAllocations);
+$('paymentForm').addEventListener('submit',e=>{e.preventDefault();let cid=$('paymentCustomer').value,amount=Number($('paymentAmount').value),checked=[...document.querySelectorAll('.allocCheck:checked')],allocations=[];if(!cid){alert('مشتری را انتخاب کن.');return}if(!checked.length){alert('حداقل یک خرید را برای تخصیص پرداخت انتخاب کن.');return}let remaining=amount;for(let cb of checked){let s=db.sales.find(s=>s.id===cb.value),input=document.querySelector(`.allocAmount[data-sale="${cb.value}"]`),v=input.value===''?0:Number(input.value);if(v>saleDebt(s)){alert('مبلغ تخصیص از بدهی این خرید بیشتر است.');return}allocations.push({saleId:s.id,amount:v});remaining-=v}if(remaining!==0){alert('جمع مبالغ تخصیص باید دقیقاً برابر مبلغ پرداختی باشد. باقی‌مانده تخصیص‌نیافته: '+fmt(remaining)+' تومان');return}db.payments.push({id:uid(),customerId:cid,date:$('paymentDate').value,amount,method:$('paymentMethod').value,allocations,note:$('paymentNote').value.trim()});$('paymentForm').reset();$('paymentDate').value=today();renderAllocations();save();alert('پرداخت ثبت شد.')});
+window.deletePayment=id=>{if(!confirm('این پرداخت حذف شود؟ بدهی خریدهای مرتبط دوباره محاسبه می‌شود.'))return;db.payments=db.payments.filter(p=>p.id!==id);save()};
+$('reportSearch').addEventListener('input',renderReport);
+$('newCustomerQuick').onclick=()=>{document.querySelector('[data-tab="customers"]').click();$('customerName').focus()};
+$('exportBackup').onclick=()=>{let blob=new Blob([JSON.stringify({...db,backupCreatedAt:new Date().toISOString()},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='berenjyar-backup-'+today()+'.json';a.click();URL.revokeObjectURL(url)};
+$('importBackup').onclick=()=>{let f=$('importFile').files[0];if(!f){alert('ابتدا فایل پشتیبان را انتخاب کن.');return}let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.customers)||!Array.isArray(x.lots)||!Array.isArray(x.sales)||!Array.isArray(x.payments))throw 0;if(!confirm('اطلاعات فعلی با نسخه پشتیبان جایگزین شود؟'))return;db={customers:x.customers,lots:x.lots,sales:x.sales,payments:x.payments,pendingDeposits:x.pendingDeposits||[],bankSmsIds:x.bankSmsIds||[]};save();alert('بازیابی انجام شد.')}catch{alert('فایل پشتیبان معتبر نیست.')}};r.readAsText(f)};
+$('clearAll').onclick=()=>{if(confirm('همه مشتریان، محموله‌ها، فروش‌ها و پرداخت‌ها برای همیشه پاک شوند؟')){db={customers:[],lots:[],sales:[],payments:[],pendingDeposits:[],bankSmsIds:[]};save()}};
+function digitsLatin(v){return String(v||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));}
+function parseSmsAmount(body){let t=digitsLatin(body).replace(/[,٬،]/g,'');let patterns=[/(?:مبلغ|واریز|واریزی|انتقال)[^\d]{0,25}(\d{4,})/i,/(\d{4,})\s*(?:ریال|تومان)/i];for(const re of patterns){let m=t.match(re);if(m){let n=Number(m[1]);if(!Number.isFinite(n)||n<=0)continue;let tail=t.slice((m.index||0), (m.index||0)+m[0].length+20);if(/ریال/.test(tail)&&!/تومان/.test(tail))n=Math.round(n/10);return n;}}return null;}
+function smsDate(ts){let d=new Date(Number(ts)||Date.now());return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function receiveBankSms(raw){try{let arr=Array.isArray(raw)?raw:[raw];let added=0;for(let x of arr){if(!x)continue;let id=String(x.id||x.hash||`${x.timestamp}-${x.body}`);if(db.bankSmsIds.includes(id)||db.pendingDeposits.some(p=>p.smsId===id))continue;let body=String(x.body||'');let amount=Number(x.amount)||parseSmsAmount(body);db.bankSmsIds.push(id);if(amount===null||!Number.isFinite(amount)||amount<=0)amount=0;db.pendingDeposits.push({id:uid(),smsId:id,amount,date:smsDate(x.timestamp),timestamp:Number(x.timestamp)||Date.now(),body,source:String(x.sender||'پیامک بانکی'),status:'pending'});added++;}save();if(window.AndroidSmsBridge&&arr.length){try{AndroidSmsBridge.acknowledgeSms(JSON.stringify(arr.map(x=>String(x.id||x.hash||`${x.timestamp}-${x.body}`))))}catch(e){}}$('smsStatus').textContent=added?`${fmt(added)} پیامک تراکنش برای بررسی اضافه شد.`:'پیامک جدیدی برای ثبت پیدا نشد.';}catch(e){$('smsStatus').textContent='خواندن پیامک انجام نشد.'}}
+window.receiveBankSms=receiveBankSms;
+function renderBankDeposits(){const root=$('pendingDepositsList');if(!root)return;let pending=db.pendingDeposits.filter(p=>p.status==='pending');if(!pending.length)root.innerHTML='<div class="empty">واریزی تعیین‌تکلیف‌نشده‌ای وجود ندارد.</div>';else{let groups={};pending.forEach(p=>{(groups[p.date]||(groups[p.date]=[])).push(p)});root.innerHTML=Object.keys(groups).sort().reverse().map(date=>{let items=groups[date],total=items.reduce((a,p)=>a+Number(p.amount),0);return `<div class="list-item"><div class="item-top"><div><div class="item-title">واریزی‌های ${dateFa(date)}</div><div class="muted">${items.length} تراکنش؛ جزئیات هر پیامک حفظ شده است.</div></div><strong class="money">${fmt(total)} تومان</strong></div>${items.map(p=>`<div class="muted" style="border-top:1px solid #edf2ee;padding:7px 0">${new Date(p.timestamp).toLocaleTimeString('fa-IR',{hour:'2-digit',minute:'2-digit'})} · ${p.amount>0?fmt(p.amount)+' تومان':'مبلغ نامشخص'} · ${esc(p.source)} <button class="secondary smallbtn" onclick="editDepositAmount('${p.id}')">اصلاح مبلغ</button></div>`).join('')}<label>اختصاص مجموع این روز به مشتری</label><select id="depositCustomer_${date}"><option value="">انتخاب مشتری</option>${db.customers.map(c=>`<option value="${c.id}">${esc(c.name)} — بدهی ${fmt(customerDebt(c.id))} تومان</option>`).join('')}</select><div class="form-actions"><button class="primary" onclick="assignDepositGroup('${date}')">تأیید و ثبت مجموع واریزی‌ها</button></div></div>`}).join('')}
+const credits=db.customers.filter(c=>Number(c.credit||0)>0);$('customerCreditsList').innerHTML=credits.length?credits.map(c=>`<div class="list-item"><div class="item-top"><strong>${esc(c.name)}</strong><strong class="money">${fmt(c.credit)} تومان بستانکاری</strong></div><div class="muted">این اعتبار هنگام ثبت خرید جدید به‌طور خودکار مصرف می‌شود.</div></div>`).join(''):'<div class="empty">فعلاً بستانکاری ثبت نشده است.</div>';}
+window.editDepositAmount=id=>{let p=db.pendingDeposits.find(x=>x.id===id);if(!p)return;let v=prompt('مبلغ صحیح واریزی به تومان را وارد کن:',String(p.amount));if(v===null)return;v=Number(digitsLatin(v).replace(/[,٬،]/g,''));if(!Number.isFinite(v)||v<=0){alert('مبلغ معتبر نیست.');return}p.amount=Math.round(v);save()};
+window.assignDepositGroup=date=>{let cid=$(`depositCustomer_${date}`).value;if(!cid){alert('ابتدا مشتری را انتخاب کن.');return}let items=db.pendingDeposits.filter(p=>p.status==='pending'&&p.date===date);if(!items.length)return;let amount=items.reduce((a,p)=>a+Number(p.amount),0);if(amount<=0){alert('حداقل یک مبلغ معتبر ثبت کن. برای اصلاح مبلغ از دکمه کنار پیامک استفاده کن.');return}if(!confirm(`مجموع ${fmt(amount)} تومان از ${items.length} واریزی برای مشتری ${customerName(cid)} ثبت شود؟`))return;let remaining=amount,allocations=[];let sales=db.sales.filter(s=>s.customerId===cid&&!s.cancelled&&saleDebt(s)>0).sort((a,b)=>a.date.localeCompare(b.date));for(let sale of sales){if(remaining<=0)break;let use=Math.min(remaining,saleDebt(sale));if(use>0){allocations.push({saleId:sale.id,amount:use});remaining-=use}}let cust=db.customers.find(c=>c.id===cid);if(remaining>0&&cust)cust.credit=Number(cust.credit||0)+remaining;db.payments.push({id:uid(),customerId:cid,date,amount,method:'واریز بانکی (پیامک)',allocations,note:`${items.length} پیامک؛ ${items.map(p=>p.smsId).join(',')}`});items.forEach(p=>p.status='assigned');save();alert(`ثبت شد. مجموع: ${fmt(amount)} تومان${remaining>0?'؛ بستانکاری افزوده‌شده: '+fmt(remaining)+' تومان':''}`)};
+$('refreshSms').onclick=()=>{if(window.AndroidSmsBridge){try{let raw=AndroidSmsBridge.getPendingSms();receiveBankSms(JSON.parse(raw||'[]'));}catch(e){$('smsStatus').textContent='دریافت پیامک‌ها از اندروید انجام نشد.'}}else{$('smsStatus').textContent='این فایل در مرورگر معمولی اجرا شده است؛ برای دریافت خودکار پیامک باید نسخه اندرویدی نصب و مجوز پیامک داده شود.'}};
+if(window.AndroidSmsBridge){try{receiveBankSms(JSON.parse(AndroidSmsBridge.getPendingSms()||'[]'));}catch(e){}}
+renderAll();
+window.addEventListener('resize',()=>{if($('reports').classList.contains('active'))renderProfitCharts()});
+</script>
+</body></html>
